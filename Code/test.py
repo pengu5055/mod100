@@ -31,11 +31,12 @@ cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
 
 # Plot Servers
 servers = grid.plot_servers()
-img = plt.imread("x.png")            
+s_ico = plt.imread("x.png")            
 for server in servers:
-    ax.imshow(img, extent=[server[1], server[1] + 1, server[2] - 1, server[2]], zorder=10)
+    ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2] - 1, server[2]], zorder=10)
 # Plot Users
 users = grid.plot_users()
+u_ico = plt.imread("user_ico.png")
 for user in users:
     ax.text(user[1], user[2], f"U{user[0]}", ha="center", va="center", color="black")
 
@@ -56,3 +57,5 @@ ax.set_yticklabels(np.flip(np.arange(0, grid.size, 1)))
 ax.grid(which="minor", color="black", linestyle="-", linewidth=2)
 
 plt.show()
+
+print(cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85), return_fmt="hex"))

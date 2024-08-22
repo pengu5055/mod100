@@ -10,3 +10,7 @@ odjemalci, ko je skupna hitrost prenosa največja. Ker gre za naključna omrežj
 statistično porazdelitev zanimivih količin.
 ```
 
+* Color Scheme:
+```python
+['#900EA5', '#B60683', '#D12352', '#D95128', '#D17C05', '#B8A51B', '#89CA53', '#3CE89E']
+```
