@@ -10,6 +10,9 @@ from base import *
 # Use Custom Style
 mpl.style.use("./ma-style.mplstyle")
 colors = cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85))
+cm = custom_cmap
+
+
 
 grid = Grid(10)
 server = Server(0, (5, 5), 0.5, 0.5)
@@ -21,7 +24,8 @@ fig, ax = plt.subplots(figsize=(6, 5), layout="compressed")
 
 # Plot Wires
 wires = grid.plot_wires()
-cmap = mpl.colors.ListedColormap(colors)
+cmap = cm
+cm.set_bad(color="black")
 img = ax.imshow(wires, cmap=cmap, vmin=0, vmax=1, zorder=5, origin="lower",
                 extent=[0, grid.size, 0, grid.size])
 cbar = fig.colorbar(img, ax=ax, orientation="horizontal", pad=0.1)
