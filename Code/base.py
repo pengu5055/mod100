@@ -102,6 +102,7 @@ class Grid:
                  ):
         self.size = size
         self.grid = np.zeros((size, size), dtype=object)
+        self.indices = [[x, y] for x in range(size) for y in range(size)]
         for x in range(size):
             for y in range(size):
                 self.grid[x][y] = Wire(x * size + y, (x, y), np.random.random())
@@ -111,6 +112,9 @@ class Grid:
 
     def add_user(self, user):
         self.grid[user.position] = user
+
+    def get_indices(self):
+        return self.indices
     
     def plot_wires(self):
         output = np.zeros((self.size, self.size))
@@ -155,7 +159,6 @@ class Grid:
 
                 elif isinstance(self.grid[x][y], Server):
                     output[x][y] = f"S:{self.grid[x][y].id}"
-                    print(output[x][y])
                 elif isinstance(self.grid[x][y], User):
                     output[x][y] = f"U:{self.grid[x][y].id}"
                 else:
@@ -168,6 +171,9 @@ class Grid:
         output[self.size - 1][self.size - 1] = "┘" if output[self.size - 1][self.size - 1] == "-" else output[self.size - 1][self.size - 1]
 
         return "\n".join(["".join([str(x + "\t") for x in row]) for row in output])
+    
+    def __getitem__(self, key):
+        return self.grid[key]
     
 
         
