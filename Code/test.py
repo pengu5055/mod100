@@ -22,7 +22,7 @@ fig, ax = plt.subplots(figsize=(6, 5), layout="compressed")
 # Plot Wires
 wires = grid.plot_wires()
 cmap = mpl.colors.ListedColormap(colors)
-img = ax.imshow(wires, cmap=cmap, vmin=0, vmax=1, zorder=5,
+img = ax.imshow(wires, cmap=cmap, vmin=0, vmax=1, zorder=5, origin="lower",
                 extent=[0, grid.size, 0, grid.size])
 cbar = fig.colorbar(img, ax=ax, orientation="horizontal", pad=0.1)
 cbar.set_label("Bandwidth")
@@ -31,14 +31,14 @@ cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
 
 # Plot Servers
 servers = grid.plot_servers()
-s_ico = plt.imread("x.png")            
+s_ico = plt.imread("server_ico.png")            
 for server in servers:
-    ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2] - 1, server[2]], zorder=10)
+    ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=10)
 # Plot Users
 users = grid.plot_users()
 u_ico = plt.imread("user_ico.png")
 for user in users:
-    ax.text(user[1], user[2], f"U{user[0]}", ha="center", va="center", color="black")
+    ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
 
 # Plot Grid
 if True:
@@ -53,7 +53,7 @@ if True:
 ax.set_xticks(np.arange(0.5, grid.size, 1))
 ax.set_xticklabels(np.arange(0, grid.size, 1))
 ax.set_yticks(np.arange(0.5, grid.size, 1))
-ax.set_yticklabels(np.flip(np.arange(0, grid.size, 1)))
+ax.set_yticklabels(np.arange(0, grid.size, 1))
 ax.grid(which="minor", color="black", linestyle="-", linewidth=2)
 
 plt.show()
