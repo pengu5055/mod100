@@ -62,7 +62,7 @@ for i in indices:
 fig, ax = plt.subplots(figsize=(6, 5), layout="compressed")
 
 # Plot Wires
-wires = grid.plot_wires()
+wires = grid.get_wires()
 cmap = cm
 cm.set_bad(color="black")
 img = ax.imshow(flow_values, cmap=cmap, vmin=0, vmax=1, zorder=5, origin="lower",
@@ -73,13 +73,13 @@ cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
 cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
 
 # Plot Servers
-servers = grid.plot_servers()
+servers = grid.get_servers()
 s_ico = plt.imread("server_ico.png")
 for server in servers:
     ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=10)
 
 # Plot Users
-users = grid.plot_users()
+users = grid.get_users()
 u_ico = plt.imread("user_ico.png")
 for user in users:
     ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
