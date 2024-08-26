@@ -7,6 +7,14 @@ import matplotlib as mpl
 hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683", "#E6E6E6"] #, "#FFFFFF"]
 custom_cmap = mpl.colors.LinearSegmentedColormap.from_list("ma-pink", hex_colors)
 
+# Flow Directions to Index Mapping
+FLOW_INDEX = {
+    "N": (0, -1),
+    "E": (1, 0),
+    "S": (0, 1),
+    "W": (-1, 0),
+}
+
 
 class Server:
     """
@@ -25,6 +33,7 @@ class Server:
         self.bandwidth_in = server_bandwidth_in
         self.bandwidth_out = server_bandwidth_out
         self.bandwidth = server_bandwidth_in
+        self.flow = Flow(0, 0, 0, 0)
 
     def __str__(self):
         return f"[Server: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
@@ -56,6 +65,7 @@ class User:
         self.bandwidth_in = user_bandwidth_in
         self.bandwidth_out = user_bandwidth_out
         self.bandwidth = user_bandwidth_in
+        self.flow = Flow(0, 0, 0, 0)
 
     def __str__(self):
         return f"[User: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
@@ -83,6 +93,7 @@ class Wire:
         self.y = wire_position[1]
         self.position = wire_position
         self.bandwidth = wire_bandwidth
+        self.flow = Flow(0, 0, 0, 0)
 
     def __str__(self):
         return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
@@ -119,6 +130,9 @@ class Flow:
     def __ne__(self, other):
         return not self.__eq__(other)
     
+    def sum(self):
+        return self.N + self.E + self.S + self.W
+    
     def is_valid(self):
         return self.N + self.E + self.S + self.W <= self.EPS
     
@@ -146,7 +160,7 @@ class Grid:
     def get_indices(self):
         return self.indices
     
-    def plot_wires(self):
+    def get_wires(self):
         output = np.zeros((self.size, self.size))
         for x in range(self.size):
             for y in range(self.size):
@@ -161,13 +175,13 @@ class Grid:
                 
         return output
     
-    def plot_servers(self):
+    def get_servers(self):
         list_servers = [x for x in self.grid.flatten() if isinstance(x, Server)]
         output = [[s.id, s.x, s.y, s.bandwidth_in, s.bandwidth_out] for s in list_servers]
 
         return np.array(output)
     
-    def plot_users(self):
+    def get_users(self):
         list_users = [x for x in self.grid.flatten() if isinstance(x, User)]
         output = [[u.id, u.x, u.y, u.bandwidth_in, u.bandwidth_out] for u in list_users]
 
@@ -206,5 +220,5 @@ class Grid:
         return self.grid[key]
     
 
-        
+    
         
