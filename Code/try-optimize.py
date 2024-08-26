@@ -24,6 +24,10 @@ grid.add_user(user)
 lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
 flow_vars = pulp.LpVariable.dicts("Flow", indices, lowBound=0, upBound=1, cat="Continuous")
 
+for ind in indices:
+    i, j = ind 
+    flow_vars[(i, j)].setInitialValue(grid[i][j].bandwidth)
+
 # Objective Function
 lp_problem += pulp.lpSum([flow_vars[(i, j)] for i in indices for j in indices if isinstance(grid[i, j], User)])
 
@@ -42,7 +46,7 @@ for i in indices:
             lp_problem += pulp.lpSum([flow_vars[(i, j)] for i in indices]) == grid[i, j].user_bandwidth_in, f"User_In_{i}_{j}"
 
 # Solve the LP Problem
-lp_problem.solve()
+lp_problem.solve(pulp.PULP_CBC_CMD(msg=True, warmStart=True))
 
 # Print the status of the solution
 print("Status:", pulp.LpStatus[lp_problem.status])

@@ -22,17 +22,18 @@ class Server:
         self.position = server_position
         self.x = server_position[0]
         self.y = server_position[1]
-        self.server_bandwidth_in = server_bandwidth_in
-        self.server_bandwidth_out = server_bandwidth_out
+        self.bandwidth_in = server_bandwidth_in
+        self.bandwidth_out = server_bandwidth_out
+        self.bandwidth = server_bandwidth_in
 
     def __str__(self):
-        return f"[Server: {self.id} // Bandwidth In: {self.server_bandwidth_in} // Bandwidth Out: {self.server_bandwidth_out}]"
+        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
     
     def __repr__(self):
-        return f"[Server: {self.id} // Bandwidth In: {self.server_bandwidth_in} // Bandwidth Out: {self.server_bandwidth_out}]"
+        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
     
     def __eq__(self, other):
-        return self.id == other.server_id and self.server_bandwidth_in == other.server_bandwidth_in and self.server_bandwidth_out == other.server_bandwidth_out
+        return self.id == other.id and self.bandwidth_in == other.bandwidth_in and self.bandwidth_out == other.bandwidth_out
     
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -52,17 +53,18 @@ class User:
         self.position = user_position
         self.x = user_position[0]
         self.y = user_position[1]
-        self.user_bandwidth_in = user_bandwidth_in
-        self.user_bandwidth_out = user_bandwidth_out
+        self.bandwidth_in = user_bandwidth_in
+        self.bandwidth_out = user_bandwidth_out
+        self.bandwidth = user_bandwidth_in
 
     def __str__(self):
-        return f"[User: {self.id} // Bandwidth In: {self.user_bandwidth_in} // Bandwidth Out: {self.user_bandwidth_out}]"
+        return f"[User: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
     
     def __repr__(self):
-        return f"[User: {self.id} // Bandwidth In: {self.user_bandwidth_in} // Bandwidth Out: {self.user_bandwidth_out}]"
+        return f"[User: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
     
     def __eq__(self, other):
-        return self.id == other.user_id and self.user_bandwidth_in == other.user_bandwidth_in and self.user_bandwidth_out == other.user_bandwidth_out
+        return self.id == other.id and self.bandwidth_in == other.bandwidth_in and self.bandwidth_out == other.bandwidth_out
     
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -76,21 +78,49 @@ class Wire:
                  wire_position,
                  wire_bandwidth,
                  ):
-        self.wire_id = wire_id
-        self.wire_position = wire_position
-        self.wire_bandwidth = wire_bandwidth
+        self.id = wire_id
+        self.x = wire_position[0]
+        self.y = wire_position[1]
+        self.position = wire_position
+        self.bandwidth = wire_bandwidth
 
     def __str__(self):
-        return f"[Wire: {self.wire_id} // Bandwidth: {self.wire_bandwidth}]"
+        return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
     
     def __repr__(self):
-        return f"[Wire: {self.wire_id} // Bandwidth: {self.wire_bandwidth}]"
+        return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
     
     def __eq__(self, other):
-        return self.wire_id == other.wire_id and self.wire_bandwidth == other.wire_bandwidth
+        return self.id == other.id and self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
+    
+
+class Flow:
+    def __init__(self,
+                 flow_N,
+                 flow_E,
+                 flow_S,
+                 flow_W,
+                 ) -> None:
+        self.EPS = 1e-8
+        self.N = flow_N
+        self.E = flow_E
+        self.S = flow_S
+        self.W = flow_W
+
+    def __str__(self) -> str:
+        return f"[Flow: N: {self.N} // E: {self.E} // S: {self.S} // W: {self.W}]"
+    
+    def __eq__(self, other):
+        return self.N == other.N and self.E == other.E and self.S == other.S and self.W == other.W
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
+    def is_valid(self):
+        return self.N + self.E + self.S + self.W <= self.EPS
     
 
 class Grid:
@@ -121,7 +151,7 @@ class Grid:
         for x in range(self.size):
             for y in range(self.size):
                 if isinstance(self.grid[x][y], Wire):
-                    output[x][y] = self.grid[x][y].wire_bandwidth
+                    output[x][y] = self.grid[x][y].bandwidth
                 elif isinstance(self.grid[x][y], Server):
                     output[x][y] = np.nan
                 elif isinstance(self.grid[x][y], User):
@@ -133,13 +163,13 @@ class Grid:
     
     def plot_servers(self):
         list_servers = [x for x in self.grid.flatten() if isinstance(x, Server)]
-        output = [[s.id, s.x, s.y, s.server_bandwidth_in, s.server_bandwidth_out] for s in list_servers]
+        output = [[s.id, s.x, s.y, s.bandwidth_in, s.bandwidth_out] for s in list_servers]
 
         return np.array(output)
     
     def plot_users(self):
         list_users = [x for x in self.grid.flatten() if isinstance(x, User)]
-        output = [[u.id, u.x, u.y, u.user_bandwidth_in, u.user_bandwidth_out] for u in list_users]
+        output = [[u.id, u.x, u.y, u.bandwidth_in, u.bandwidth_out] for u in list_users]
 
         return np.array(output)
     
