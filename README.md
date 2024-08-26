@@ -14,3 +14,5 @@ statistično porazdelitev zanimivih količin.
 ```python
 ['#900EA5', '#B60683', '#D12352', '#D95128', '#D17C05', '#B8A51B', '#89CA53', '#3CE89E']
 ```
+
+https://math.stackexchange.com/questions/432003/converting-absolute-value-program-into-linear-program

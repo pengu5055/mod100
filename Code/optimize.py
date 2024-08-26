@@ -23,6 +23,19 @@ grid.add_user(user)
 
 # Setup Flow Dictionary with all directions
 lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
+four_flow_positive = {
+    "N": pulp.LpVariable.dicts("Flow_N_pos", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "E": pulp.LpVariable.dicts("Flow_E_pos", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "S": pulp.LpVariable.dicts("Flow_S_pos", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "W": pulp.LpVariable.dicts("Flow_W_pos", indices, lowBound=0, upBound=1, cat="Continuous"),
+}
+four_flow_negative = {
+    "N": pulp.LpVariable.dicts("Flow_N_neg", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "E": pulp.LpVariable.dicts("Flow_E_neg", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "S": pulp.LpVariable.dicts("Flow_S_neg", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "W": pulp.LpVariable.dicts("Flow_W_neg", indices, lowBound=0, upBound=1, cat="Continuous"),
+}
+
 four_flow = {
     "N": pulp.LpVariable.dicts("Flow_N", indices, lowBound=-1, upBound=1, cat="Continuous"),
     "E": pulp.LpVariable.dicts("Flow_E", indices, lowBound=-1, upBound=1, cat="Continuous"),
@@ -30,23 +43,27 @@ four_flow = {
     "W": pulp.LpVariable.dicts("Flow_W", indices, lowBound=-1, upBound=1, cat="Continuous"),
 }
 
+# Constraint 0: Build flow from positive and negative flow
+# for i, j in indices:
+#     for dir in four_flow.keys():
+#         lp_problem += four_flow[dir][(i, j)] == four_flow_positive[dir][(i, j)] - four_flow_negative[dir][(i, j)], f"Flow_Build_{dir}_{i}_{j}"
+
+
 # Constraint 1: Flow must obey the bandwidth constraints
 for i, j in indices:
         if isinstance(grid.grid[i][j], Wire):
-            print([four_flow[direction][(i, j)].value() for direction in four_flow.keys()])
-            lp_problem += pulp.lpSum([four_flow[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].flow.EPS, f"Prevent_Loss_{i}_{j}"
-            lp_problem += pulp.lpSum([four_flow[direction][(i, j)] for direction in four_flow.keys()]) >= -grid[i][j].flow.EPS, f"Prevent_Loss_Neg_{i}_{j}"
+            # lp_problem += pulp.lpSum([four_flow[direction][(i, j)] for direction in four_flow.keys()]) == 0, f"Flow_Absolute_Sum_{i}_{j}"
+            lp_problem += pulp.lpSum([four_flow_positive[direction][(i, j)] + four_flow_negative[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].bandwidth, f"Bandwidth_{i}_{j}"
         
         if isinstance(grid.grid[i][j], Server):
             for dir in four_flow.keys():
-                lp_problem += four_flow[dir][(i, j)] >= 0, f"Prevent_Server_In_{dir}_{i}_{j}"
-            lp_problem += pulp.lpSum([four_flow[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].bandwidth, f"Server_Out_Balance_{i}_{j}"
+                lp_problem += four_flow_negative[dir][(i, j)] == 0, f"Prevent_Server_In_{dir}_{i}_{j}"
+            lp_problem += pulp.lpSum([four_flow_positive[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].bandwidth, f"Server_Out_Balance_{i}_{j}"
         
-
         if isinstance(grid.grid[i][j], User):
             for dir in four_flow.keys():
-                lp_problem += four_flow[dir][(i, j)] <= 0, f"Prevent_User_Out_{dir}_{i}_{j}"
-            lp_problem += pulp.lpSum([four_flow[direction][(i, j)] for direction in four_flow.keys()]) >= -grid[i][j].bandwidth, f"User_In_Balance_{i}_{j}"
+                lp_problem += four_flow_positive[dir][(i, j)] == 0, f"Prevent_User_Out_{dir}_{i}_{j}"
+            lp_problem += pulp.lpSum([four_flow_negative[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].bandwidth, f"User_In_Balance_{i}_{j}"
         
 
 # Constraint 2: Sum of flow out of servers must be equal to sum of flow into users
@@ -60,14 +77,14 @@ for user_data in users:
     x = int(x)
     y = int(y)
     user = grid.grid[x][y]
-    user_in += pulp.lpSum([four_flow[direction][(x, y)] for direction in four_flow.keys()])
+    user_in += pulp.lpSum([four_flow_negative[direction][(x, y)] for direction in four_flow.keys()])
 
 for server_data in servers:
     _, x, y, _, _ = server_data
     x = int(x)
     y = int(y)
     server = grid.grid[x][y]
-    server_out += pulp.lpSum([four_flow[direction][(x, y)] for direction in four_flow.keys()])
+    server_out += pulp.lpSum([four_flow_positive[direction][(x, y)] for direction in four_flow.keys()])
 
 lp_problem += user_in == server_out, "Flow_Balance"
 
@@ -77,21 +94,16 @@ for i, j in indices:
     for dir, neighbor in neighbors.items():
         if neighbor in indices:
             opposite_flow = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index((FLOW_INDEX[dir][0] * -1, FLOW_INDEX[dir][1] * -1))]
-            lp_problem += four_flow[dir][(i, j)] == four_flow[opposite_flow][neighbor], f"Flow_Continuity_{dir}_{i}_{j}"
+            lp_problem += four_flow_positive[dir][(i, j)] == four_flow_positive[opposite_flow][neighbor], f"Flow_Continuity_pos_{dir}_{i}_{j}"
+            lp_problem += four_flow_negative[dir][(i, j)] == four_flow_negative[opposite_flow][neighbor], f"Flow_Continuity_neg_{dir}_{i}_{j}"
 
         else:
             # Border Case
-            lp_problem += four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
-        
-    # if isinstance(grid.grid[i][j], Wire):        
-    #     lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) == 0, f"Flow_Continuity_{i}_{j}"
-    # elif isinstance(grid.grid[i][j], Server):
-    #     lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) >= 0, f"Flow_Source_{i}_{j}"
-    # elif isinstance(grid.grid[i][j], User):
-    #     lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) <= 0, f"Flow_Sink_{i}_{j}"
+            lp_problem += four_flow_positive[dir][(i, j)] == 0, f"Flow_Continuity_pos_{dir}_{i}_{j}"
+            lp_problem += four_flow_negative[dir][(i, j)] == 0, f"Flow_Continuity_neg_{dir}_{i}_{j}"
 
 # Objective Function
-lp_problem += pulp.lpSum([[four_flow[direction][(x, y)] for direction in four_flow.keys()] for x, y in indices if isinstance(grid.grid[x][y], User)])             
+lp_problem += pulp.lpSum([[four_flow_negative[direction][(x, y)] for direction in four_flow.keys()] for x, y in indices if isinstance(grid.grid[x][y], User)])             
             
 
 # Solve the LP Problem
@@ -100,17 +112,71 @@ print("Status:", pulp.LpStatus[lp_problem.status])
 
 # Get the optimized flow values
 flow_values = np.zeros((grid.size, grid.size, 4))
+max_flow = 0
 for i, j in indices:
     for k, direction in enumerate(four_flow.keys()):
-        # if isinstance(grid.grid[i][j], Wire):
-        flow_values[i, j, k] = (four_flow[direction][(i, j)].value())
+        max_flow_attempt = max(four_flow_positive[direction][(i, j)].value(), four_flow_negative[direction][(i, j)].value())
+        max_flow = max(max_flow, max_flow_attempt)
+        flow_values[i, j, k] = four_flow_positive[direction][(i, j)].value() - four_flow_negative[direction][(i, j)].value()
+
+
+print(max_flow)
+
+if max_flow == 0:
+    quit()
         
+# Plot the optimized network
+fig, axes = plt.subplots(2, 2, figsize=(12, 8), layout="compressed")
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="compressed")
-
-ax = axes[0]
+ax = axes[0, 0]
 
 img = ax.imshow(np.sum((flow_values), axis=2), cmap=cm, vmin=-4, vmax=4, zorder=5, origin="lower", aspect="auto",
+                extent=[0, grid.size, 0, grid.size], alpha=1)
+cbar = fig.colorbar(img, ax=ax, orientation="horizontal", pad=0.1)
+cbar.set_label("Flow")
+
+servers = grid.get_servers()
+s_ico = plt.imread("server_ico.png")
+for server in servers:
+    ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=12)
+
+# Plot Users
+users = grid.get_users()
+u_ico = plt.imread("user_ico.png")
+for user in users:
+    ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=12)
+
+
+# Plot Grid
+if False:
+    for i in range(grid.size):
+        for j in range(grid.size):
+            for k, dir in enumerate(FLOW_INDEX.keys()):
+                val = flow_values[i, j, k] / max_flow
+                x = i + 0.5
+                y = j + 0.5
+                if val > 0:
+                    print(cm(val))
+                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=cm(val),
+                            alpha=1, lw=2, zorder=11)
+                else:
+                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=custom_cmap2(val),
+                            alpha=1, lw=2, zorder=11)
+            ax.plot([x, x], [y, y + 1], color="black", alpha=0.1, lw=2, zorder=5)
+            ax.plot([x, x + 1], [y, y], color="black", alpha=0.1, lw=2, zorder=5)
+            ax.plot([x, x + 1], [y + 1, y + 1], color="black", alpha=0.1, lw=2, zorder=10)
+            ax.plot([x + 1, x + 1], [y, y + 1], color="black", alpha=0.1, lw=2, zorder=10)
+
+ax.set_xticks(np.arange(0.5, grid.size, 1))
+ax.set_xticklabels(np.arange(0, grid.size, 1))
+ax.set_yticks(np.arange(0.5, grid.size, 1))
+ax.set_yticklabels(np.arange(0, grid.size, 1))
+ax.set_xlim(0, grid.size)
+ax.set_ylim(0, grid.size)
+
+ax = axes[0, 1]
+
+img = ax.imshow(np.sum(np.abs(flow_values), axis=2), cmap=cm, vmin=-4, vmax=4, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
 cbar = fig.colorbar(img, ax=ax, orientation="horizontal", pad=0.1)
 cbar.set_label("Flow")
@@ -129,16 +195,20 @@ u_ico = plt.imread("user_ico.png")
 for user in users:
     ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
 
-max_flow = np.max(np.abs(flow_values))
 
 # Plot Grid
 if True:
-    for x in np.arange(0.5, grid.size - 0.5, 1):
-        for y in np.arange(0.5, grid.size - 0.5, 1):
+    for i in range(grid.size):
+        for j in range(grid.size):
             for k, dir in enumerate(FLOW_INDEX.keys()):
-                val = flow_values[int(x), int(y), k] / max_flow
+                val = flow_values[i, j, k] / max_flow
+                x = i + 0.5
+                y = j + 0.5
                 if val > 0:
                     ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=cm(val),
+                            alpha=1, lw=2, zorder=5)
+                else:
+                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=custom_cmap2(val),
                             alpha=1, lw=2, zorder=5)
             # ax.plot([x, x], [y, y + 1], color="black", alpha=0.1, lw=2, zorder=5)
             # ax.plot([x, x + 1], [y, y], color="black", alpha=0.1, lw=2, zorder=5)
@@ -149,8 +219,11 @@ ax.set_xticks(np.arange(0.5, grid.size, 1))
 ax.set_xticklabels(np.arange(0, grid.size, 1))
 ax.set_yticks(np.arange(0.5, grid.size, 1))
 ax.set_yticklabels(np.arange(0, grid.size, 1))
+ax.set_xlim(0, grid.size)
+ax.set_ylim(0, grid.size)
 
-ax = axes[1]
+
+ax = axes[1, 0]
 bandwidth = grid.get_max_bandwidth()
 bool_mask = [[bandwidth[x][y] == grid[x][y].flow.sum() for y in range(grid.size)] for x in range(grid.size)]
 
