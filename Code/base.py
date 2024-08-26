@@ -175,6 +175,14 @@ class Grid:
                 
         return output
     
+    def get_max_bandwidth(self):
+        output = np.zeros((self.size, self.size))
+        for x in range(self.size):
+            for y in range(self.size):
+                output[x][y] = self.grid[x][y].bandwidth
+                
+        return output
+    
     def get_servers(self):
         list_servers = [x for x in self.grid.flatten() if isinstance(x, Server)]
         output = [[s.id, s.x, s.y, s.bandwidth_in, s.bandwidth_out] for s in list_servers]

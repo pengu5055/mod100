@@ -24,10 +24,10 @@ grid.add_user(user)
 # Setup Flow Dictionary with all directions
 lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
 four_flow = {
-    "N": pulp.LpVariable.dicts("Flow_N", indices, lowBound=0, upBound=1, cat="Continuous"),
-    "E": pulp.LpVariable.dicts("Flow_E", indices, lowBound=0, upBound=1, cat="Continuous"),
-    "S": pulp.LpVariable.dicts("Flow_S", indices, lowBound=0, upBound=1, cat="Continuous"),
-    "W": pulp.LpVariable.dicts("Flow_W", indices, lowBound=0, upBound=1, cat="Continuous"),
+    "N": pulp.LpVariable.dicts("Flow_N", indices, lowBound=-1, upBound=1, cat="Continuous"),
+    "E": pulp.LpVariable.dicts("Flow_E", indices, lowBound=-1, upBound=1, cat="Continuous"),
+    "S": pulp.LpVariable.dicts("Flow_S", indices, lowBound=-1, upBound=1, cat="Continuous"),
+    "W": pulp.LpVariable.dicts("Flow_W", indices, lowBound=-1, upBound=1, cat="Continuous"),
 }
 
 # Constraint 1: Flow must obey the bandwidth constraints
@@ -67,19 +67,22 @@ lp_problem += user_in == server_out, "Flow_Balance"
 
 # Constraint 3: Continuity of flow between wires
 for i, j in indices:
-    if isinstance(grid.grid[i][j], Wire):
-        neighbors = {dir: (i + fi[0], j + fi[1]) for dir, fi in FLOW_INDEX.items()}
-        for dir, neighbor in neighbors.items():
-            if neighbor in indices:
-                if isinstance(grid.grid[neighbor[0]][neighbor[1]], Wire):
-                    # Flow must continue
-                    opposite_flow = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index((FLOW_INDEX[dir][0] * -1, FLOW_INDEX[dir][1] * -1))]
-                    lp_problem += four_flow[dir][(i, j)] == four_flow[opposite_flow][neighbor], f"Flow_Continuity_{dir}_{i}_{j}"
-                else:
-                    # Border Case
-                    lp_problem += four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
-            
+    neighbors = {dir: (i + fi[0], j + fi[1]) for dir, fi in FLOW_INDEX.items()}
+    for dir, neighbor in neighbors.items():
+        if neighbor in indices:
+            opposite_flow = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index((FLOW_INDEX[dir][0] * -1, FLOW_INDEX[dir][1] * -1))]
+            lp_problem += four_flow[dir][(i, j)] == four_flow[opposite_flow][neighbor], f"Flow_Continuity_{dir}_{i}_{j}"
+
+        else:
+            # Border Case
+            lp_problem += four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
+        
+    if isinstance(grid.grid[i][j], Wire):        
         lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) == 0, f"Flow_Continuity_{i}_{j}"
+    elif isinstance(grid.grid[i][j], Server):
+        lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) >= 0, f"Flow_Source_{i}_{j}"
+    elif isinstance(grid.grid[i][j], User):
+        lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) <= 0, f"Flow_Sink_{i}_{j}"
 
 # Objective Function
 lp_problem += pulp.lpSum([[four_flow[direction][(x, y)] for direction in four_flow.keys()] for x, y in indices if isinstance(grid.grid[x][y], User)])             
@@ -97,7 +100,9 @@ for i, j in indices:
         flow_values[i, j] += abs(four_flow[direction][(i, j)].value())
         
 
-fig, ax = plt.subplots(figsize=(8, 5), layout="compressed")
+fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="compressed")
+
+ax = axes[0]
 
 img = ax.imshow(flow_values, cmap=cm, vmin=0, vmax=1, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size])
@@ -132,7 +137,9 @@ ax.set_xticklabels(np.arange(0, grid.size, 1))
 ax.set_yticks(np.arange(0.5, grid.size, 1))
 ax.set_yticklabels(np.arange(0, grid.size, 1))
 
-print(flow_values[flow_values > 0])
+ax = axes[1]
+wire_bandwidth = grid.get_wires()
+
 
 plt.show()
 
