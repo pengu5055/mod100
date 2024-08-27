@@ -150,10 +150,6 @@ for i, j in indices:
     max_flow_attempt = max(four_flow_positive[direction][(i, j)].value(), four_flow_negative[direction][(i, j)].value())
     max_flow = max(max_flow, max_flow_attempt)
 
-flow_sum_neg = np.zeros((grid.size, grid.size))
-for i, j in indices:
-    flow_sum_neg[i, j] = sum([four_flow_negative[direction][(i, j)].value() for direction in four_flow.keys()])
-
 flow_sum = {
     'N': np.zeros((grid.size, grid.size)),
     'E': np.zeros((grid.size, grid.size)),
@@ -164,15 +160,20 @@ for i, j in indices:
     for direction in four_flow.keys():
         flow_sum[direction][i, j] = four_flow[direction][(i, j)].value()
 
+flow_sum_sum = np.zeros((grid.size, grid.size))
+for i, j in indices:
+    flow_sum_sum[i, j] = sum([four_flow[direction][(i, j)].value() for direction in four_flow.keys()])
+
 # Plot the optimized network
 fig, axes = plt.subplots(2, 2, figsize=(10, 8), layout="compressed")
 
 ax = axes[0, 0]
 z = np.zeros((grid.size, grid.size))
-norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
-sm = plt.cm.ScalarMappable(cmap=custom_cmap2, norm=norm)
+cm2 = cmr.get_sub_cmap("cmr.redshift", 0.15, 0.85)
+norm = mpl.colors.Normalize(vmin=-max_flow, vmax=max_flow)
+sm = plt.cm.ScalarMappable(cmap=cm2, norm=norm)
 
-img = ax.imshow(flow_sum_neg.T, cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
+img = ax.imshow(flow_sum_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
 cbar = fig.colorbar(sm, ax=ax, pad=0.1)
 cbar.set_label("Flow")
@@ -191,8 +192,8 @@ for user in users:
 # Plot Grid
 if True:
     for i in range(grid.size):
-        ax.axhline(i, color="black", lw=1)
-        ax.axvline(i, color="black", lw=1)
+        ax.axhline(i, color="black", lw=2, zorder=7)
+        ax.axvline(i, color="black", lw=2, zorder=7)
     
     # Find nonzero flow and order points with values of flow and direction
     path = []
@@ -228,9 +229,6 @@ if True:
 
 
     colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
-    
-    # Sort the path points
-    # path_points = sorted(path_points, key=lambda x: x[0]**2+x[1]**2)
     path_points.insert(0, user_points[0])
 
     for pair in zip(path_points[:-1], path_points[1:]):
@@ -245,17 +243,13 @@ if True:
             val = np.abs(val)/max_flow
             ax.plot(*zip(*pair), color=cmr.tropical(val), zorder=8, lw=3)
         else:
-            # val /= max_flow
-            # val2 /= max_flow
-            # ax.plot(*zip(*pair), color=cm(val), zorder=8)
-            # ax.plot(*zip(*pair), color=cm(val2), zorder=8)
             raise ValueError("Flow values don't match")
 
 
-# ax.set_xticks(np.arange(0.5, grid.size, 1))
-# ax.set_xticklabels(np.arange(0, grid.size, 1))
-# ax.set_yticks(np.arange(0.5, grid.size, 1))
-# ax.set_yticklabels(np.arange(0, grid.size, 1))
+ax.set_xticks(np.arange(0.5, grid.size, 1))
+ax.set_xticklabels(np.arange(0, grid.size, 1))
+ax.set_yticks(np.arange(0.5, grid.size, 1))
+ax.set_yticklabels(np.arange(0, grid.size, 1))
 ax.set_xlim(0, grid.size)
 ax.set_ylim(0, grid.size)
 
