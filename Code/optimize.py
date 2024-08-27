@@ -154,6 +154,15 @@ flow_sum_neg = np.zeros((grid.size, grid.size))
 for i, j in indices:
     flow_sum_neg[i, j] = sum([four_flow_negative[direction][(i, j)].value() for direction in four_flow.keys()])
 
+flow_sum = {
+    'N': np.zeros((grid.size, grid.size)),
+    'E': np.zeros((grid.size, grid.size)),
+    'S': np.zeros((grid.size, grid.size)),
+    'W': np.zeros((grid.size, grid.size)),
+}
+for i, j in indices:
+    for direction in four_flow.keys():
+        flow_sum[direction][i, j] = four_flow[direction][(i, j)].value()
 
 # Plot the optimized network
 fig, axes = plt.subplots(2, 2, figsize=(10, 8), layout="compressed")
@@ -162,6 +171,7 @@ ax = axes[0, 0]
 z = np.zeros((grid.size, grid.size))
 norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
 sm = plt.cm.ScalarMappable(cmap=custom_cmap2, norm=norm)
+
 img = ax.imshow(flow_sum_neg.T, cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
 cbar = fig.colorbar(sm, ax=ax, pad=0.1)
@@ -180,14 +190,19 @@ for user in users:
 
 # Plot Grid
 if True:
-    N_filtered = np.array([x for x in flow_pos['N'] if x[2] > 0])
-    E_filtered = np.array([x for x in flow_pos['E'] if x[2] > 0])
-    S_filtered = np.array([x for x in flow_pos['S'] if x[2] > 0])
-    W_filtered = np.array([x for x in flow_pos['W'] if x[2] > 0])
-
-    path = np.concatenate([N_filtered, E_filtered, S_filtered, W_filtered], axis=0)
-    colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
+    for i in range(grid.size):
+        ax.axhline(i, color="black", lw=1)
+        ax.axvline(i, color="black", lw=1)
+    
+    # Find nonzero flow and order points with values of flow and direction
+    path = []
     path_points =  []
+    for i, j in indices:
+        for direction in four_flow.keys():
+            if flow_sum[direction][i, j] > 0:
+                path.append((i, j, flow_sum[direction][i, j], direction))
+    path = sorted(path, key=lambda x: x[2], reverse=True)
+    path = np.array(path)
 
     for i, j, flow, direction in path:
         i, j = int(i) + 0.5, int(j) + 0.5
@@ -211,11 +226,21 @@ if True:
         if point not in path_points:
             server_points.append(point)
 
+
+    colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
+    
     # Sort the path points
-    path_points = sorted(path_points, key=lambda x: x[0]**2+x[1]**2)
+    # path_points = sorted(path_points, key=lambda x: x[0]**2+x[1]**2)
     path_points.insert(0, user_points[0])
 
     for pair in zip(path_points[:-1], path_points[1:]):
+        p0, p1 = np.array(pair) - 0.5
+        delta = p1 - p0
+        dir = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(delta))]
+        dir2 = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(-delta))]
+        print(dir)
+        print(flow_sum[dir][int(p0[0]), int(p0[1])])
+        print(flow_sum[dir2][int(p1[0]), int(p1[1])])
         ax.plot(*zip(*pair), color=colors[0], zorder=8)
 
 
