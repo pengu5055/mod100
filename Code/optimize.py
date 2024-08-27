@@ -238,10 +238,18 @@ if True:
         delta = p1 - p0
         dir = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(delta))]
         dir2 = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(-delta))]
-        print(dir)
-        print(flow_sum[dir][int(p0[0]), int(p0[1])])
-        print(flow_sum[dir2][int(p1[0]), int(p1[1])])
-        ax.plot(*zip(*pair), color=colors[0], zorder=8)
+        val = flow_sum[dir][int(p0[0]), int(p0[1])]
+        val2 = flow_sum[dir2][int(p1[0]), int(p1[1])]
+        if val == val2:
+            print(val)
+            val = np.abs(val)/max_flow
+            ax.plot(*zip(*pair), color=cmr.tropical(val), zorder=8, lw=3)
+        else:
+            # val /= max_flow
+            # val2 /= max_flow
+            # ax.plot(*zip(*pair), color=cm(val), zorder=8)
+            # ax.plot(*zip(*pair), color=cm(val2), zorder=8)
+            raise ValueError("Flow values don't match")
 
 
 # ax.set_xticks(np.arange(0.5, grid.size, 1))
