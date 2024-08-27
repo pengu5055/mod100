@@ -69,21 +69,22 @@ for i, j in indices:
         lp_problem += pulp.lpSum([four_flow_positive[dir][(i, j)] for dir in four_flow.keys()]) <= grid[i][j].bandwidth, f"Server_{i}_{j}"
     elif isinstance(grid[i][j], Wire):
         lp_problem += pulp.lpSum([four_flow_positive[dir][(i, j)] + four_flow_negative[dir][(i, j)] for dir in four_flow.keys()]) <= grid[i][j].bandwidth, f"Wire_{i}_{j}"
-        lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) == 0, f"Wire_Leak_Prevention_{i}_{j}"
+        # lp_problem += pulp.lpSum([four_flow[dir][(i, j)] for dir in four_flow.keys()]) == 0, f"Wire_Leak_Prevention_{i}_{j}"
+        lp_problem += pulp.lpSum([four_flow_positive[dir][(i, j)] for dir in four_flow.keys()]) == pulp.lpSum([four_flow_negative[dir][(i, j)] for dir in four_flow.keys()]), f"Wire_Leak_Prevention_{i}_{j}"
 
 # Constraint 2: Continuity of Flow
 for i, j in indices:
     neighbors = grid.get_neighbors(i, j)
     for dir, neighbor in neighbors.items():
         if neighbor is not None:
-            lp_problem += four_flow_positive[dir][(i, j)] == four_flow_positive[grid.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_P_{dir}_{i}_{j}"
-            lp_problem += four_flow_negative[dir][(i, j)] == four_flow_negative[grid.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_N_{dir}_{i}_{j}"
+            lp_problem += four_flow_positive[dir][(i, j)] == four_flow_negative[grid.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_P_{dir}_{i}_{j}"
+            lp_problem += four_flow_negative[dir][(i, j)] == four_flow_positive[grid.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_N_{dir}_{i}_{j}"
         else:
             lp_problem += four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
         
 # Define Objective Function
 # lp_problem += pulp.lpSum([four_flow[dir][(user[1], user[2])] for dir in four_flow.keys()] for user in grid.get_users())
-lp_problem += pulp.lpSum([four_flow[dir][(x, y)] for dir in four_flow.keys() for x, y in indices if isinstance(grid[x][y], Server)]) \
+lp_problem += - pulp.lpSum([four_flow[dir][(x, y)] for dir in four_flow.keys() for x, y in indices if isinstance(grid[x][y], Server)]) \
             - pulp.lpSum([four_flow[dir][(x, y)] for dir in four_flow.keys() for x, y in indices if isinstance(grid[x][y], Wire)])         
 
 # Solve LP Problem
@@ -113,7 +114,7 @@ cm2 = cmr.get_sub_cmap("cmr.redshift", 0.2, 0.8)
 norm = mpl.colors.Normalize(vmin=-1, vmax=1)
 sm = plt.cm.ScalarMappable(cmap=cm2, norm=norm)
 
-img = ax.imshow(flow_abs_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
+img = ax.imshow(flow_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
 cbar = fig.colorbar(sm, ax=ax, orientation="vertical", fraction=0.046, pad=0.04)
 cbar.set_label("Flow")
