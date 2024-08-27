@@ -16,11 +16,11 @@ cm = custom_cmap
 # Initiate Grid
 grid = Grid(10)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
-server = Server(0, (6, 7), 0.8, 0.8)
+server = Server(0, (6, 4), 1, 1)
 grid.add_server(server)
 # server = Server(1, (3, 6), 0.4, 0.4)
 # grid.add_server(server)
-user = User(0, (3, 0), 0.6, 0.6)
+user = User(0, (6, 0), 0.5, 0.5)
 grid.add_user(user)
 
 for ind in indices:
@@ -91,7 +91,7 @@ for i, j in indices:
             lp_problem += four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
 
 # Objective Function
-lp_problem += pulp.lpSum([[four_flow_negative["N"][(x, y)] for x, y in indices if isinstance(grid[x][y], User)] for x, y in indices if isinstance(grid[x][y], User)])
+lp_problem += pulp.lpSum([[four_flow_negative[dir][(x, y)] for dir in four_flow.keys()] for x, y in indices if isinstance(grid[x][y], User)])
 
 # Solve the LP Problem
 lp_problem.solve(pulp.GUROBI(msg=True, warmStart=True))
@@ -142,8 +142,9 @@ for i, j in indices:
     flow_sum_sum[i, j] = sum([four_flow[direction][(i, j)].value() for direction in four_flow.keys()])
     flow_sum_abs[i, j] = np.sum(np.abs([four_flow[direction][(i, j)].value() for direction in four_flow.keys()]))
 
-print("Max Flow:", max_flow)
-quit()
+if max_flow == 0:
+    print("No flow found.")
+    exit()
 
 # Plot the optimized network
 fig, axes = plt.subplots(2, 2, figsize=(10, 8), layout="compressed")
@@ -185,50 +186,29 @@ if True:
                 path.append((i, j, flow_sum[direction][i, j], direction))
     path = sorted(path, key=lambda x: x[2], reverse=True)
     path = np.array(path)
+    print(path)
 
-    for i, j, flow, direction in path:
-        i, j = int(i) + 0.5, int(j) + 0.5
-        i_o, j_o = i + FLOW_INDEX[direction][0], j + FLOW_INDEX[direction][1]
-        if (i, j) not in path_points:
-            path_points.append((i, j))
-        if (i_o, j_o) not in path_points:
-            path_points.append((i_o, j_o))
-
-    users = grid.get_users()
-    user_points = []
-    for user in users:
-        point = (user[1] + 0.5, user[2] + 0.5)
-        if point not in path_points:
-            user_points.append(point)
-
-    servers = grid.get_servers()
-    server_points = []
-    for server in servers:
-        point = (server[1] + 0.5, server[2] + 0.5)
-        if point not in path_points:
-            server_points.append(point)
-
-    if len(path) > 0:
-        colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
-    path_points.insert(0, user_points[0])
-
-    for pair in zip(path_points[:-1], path_points[1:]):
-        p0, p1 = np.array(pair) - 0.5
-        delta = p1 - p0
-        dir = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(delta))]
-        dir2 = list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index(tuple(-delta))]
-        val = flow_sum[dir][int(p0[0]), int(p0[1])]
-        val2 = flow_sum[dir2][int(p1[0]), int(p1[1])]
-        if val == val2:
-            val = np.abs(val)/max_flow
-            ax.plot(*zip(*pair), color=cmr.tropical(val), zorder=8, lw=3)
-        else:
-            raise ValueError("Flow values don't match")
-    
     norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
-    sm = plt.cm.ScalarMappable(cmap=cmr.tropical, norm=norm)
+    sm = plt.cm.ScalarMappable(cmap=cm, norm=norm)
     cbar2 = fig.colorbar(sm, ax=ax, orientation="horizontal")
     cbar2.set_label("Flow")
+
+    for i, j, flow, _ in path:
+        i, j = int(i) + 0.5, int(j) + 0.5
+        flow = float(flow)
+        for dir in four_flow.keys():
+            if flow_sum[dir][int(i - 0.5), int(j - 0.5)] != 0:
+                i_next, j_next = i + FLOW_INDEX[dir][0], j + FLOW_INDEX[dir][1]
+                ax.plot([i, i_next], [j, j_next], color=cm(norm(flow)), lw=2, zorder=8)
+
+    # Compass
+    c_center = np.array([2, 7]) + 0.5
+    ax.scatter(*c_center, color="white", s=50, zorder=10)
+    c_colors = ["blue", "yellow", "red", "green"]
+    for i, dir in enumerate(four_flow.keys()):
+        second = c_center + np.array(FLOW_INDEX[dir])
+        ax.plot([c_center[0], second[0]], [c_center[1], second[1]], color=c_colors[i], lw=2, zorder=9)
+        ax.text(second[0]+FLOW_INDEX[dir][0]*0.33, second[1]+FLOW_INDEX[dir][1]*0.33, dir, color=c_colors[i], fontsize=10, ha="center", va="center", zorder=10)
 
 ax.set_xticks(np.arange(0.5, grid.size, 1))
 ax.set_xticklabels(np.arange(0, grid.size, 1))

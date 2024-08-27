@@ -11,9 +11,9 @@ custom_cmap2 = mpl.colors.LinearSegmentedColormap.from_list("ma-blue", hex_color
 
 # Flow Directions to Index Mapping
 FLOW_INDEX = {
-    "N": (0, -1),
+    "S": (0, -1),
     "E": (1, 0),
-    "S": (0, 1),
+    "N": (0, 1),
     "W": (-1, 0),
 }
 
