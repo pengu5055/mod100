@@ -11,7 +11,7 @@ import pulp
 # Use Custom Style
 mpl.style.use("./ma-style.mplstyle")
 colors = cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85))
-cm = cmr.get_sub_cmap("cmr.nuclear", 0.3, 0.7)
+cm = custom_cmap
 
 # Initiate Grid
 grid = Grid(10)
@@ -139,24 +139,31 @@ path = []
 path_points =  []
 for i, j in indices:
     for direction in four_flow.keys():
-        if flow_results[direction][i, j] > 0:
+        if flow_results[direction][i, j] != 0:
             path.append((i, j, flow_results[direction][i, j], direction))
 path = sorted(path, key=lambda x: x[2], reverse=True)
 path = np.array(path)
+# print(path)
 
-norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
+norm = mpl.colors.Normalize(vmin=-max_flow, vmax=max_flow)
 sm = plt.cm.ScalarMappable(cmap=cm, norm=norm)
 cbar2 = fig.colorbar(sm, ax=ax, orientation="horizontal", fraction=0.046, pad=0.04)
 cbar2.set_label("Flow")
 
 for i, j, flow, _ in path:
-    i, j = int(i) + 0.5, int(j) + 0.5
+    i, j = int(i), int(j)
     flow = float(flow)
-    print(flow)
     for dir in four_flow.keys():
-        if flow_results[dir][int(i - 0.5), int(j - 0.5)] != 0:
-            i_next, j_next = i + FLOW_INDEX[dir][0], j + FLOW_INDEX[dir][1]
-            ax.plot([i, i_next], [j, j_next], color=cm(norm(flow)), lw=5, zorder=8)
+        if flow_results[dir][i, j] < 0:
+            i0, j0 = i + 0.33, j + 0.66
+            i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
+            f = flow_results[dir][i, j]
+            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=5, zorder=8)
+        elif flow_results[dir][i, j] > 0:
+            i0, j0 = i + 0.66, j + 0.33
+            i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
+            f = flow_results[dir][i, j]
+            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=5, zorder=8)
 
 # Compass
 if False:

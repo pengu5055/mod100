@@ -4,8 +4,8 @@ Base python file to house all the base classes and functions.
 import numpy as np
 import matplotlib as mpl
 
-# hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]
-hex_colors = ["#900EA5", "#B60683", "#E6E6E6"]
+# hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]  "#3CE89E",
+hex_colors = ["#89CA53", "#B8A51B", "#000000", "#B60683", "#E6E6E6"]
 custom_cmap = mpl.colors.LinearSegmentedColormap.from_list("ma-pink", hex_colors)
 hex_colors2 = ["#2F2E2E", "#787878", "#0E90A5", "#0683B6", "#E6E6E6"] #, "#FFFFFF"]
 custom_cmap2 = mpl.colors.LinearSegmentedColormap.from_list("ma-blue", hex_colors2)
