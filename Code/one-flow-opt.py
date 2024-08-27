@@ -182,4 +182,15 @@ ax.set_yticklabels(np.arange(0, grid.size, 1))
 ax.set_xlim(0, grid.size)
 ax.set_ylim(0, grid.size)
 
+for dir in four_flow.keys():
+    u = four_flow_positive[dir][(3, 3)].value()
+    s = four_flow_positive[dir][(3, 6)].value()
+    print(f"User to Server {dir}: {u}\t Server to User {dir}: {s}")
+print("\n")
+for dir in four_flow.keys():
+    u = four_flow_negative[dir][(3, 3)].value()
+    s = four_flow_negative[dir][(3, 6)].value()
+    print(f"User to Server {dir}: {u}\t Server to User {dir}: {s}")
+
+
 plt.show()
