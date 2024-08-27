@@ -156,7 +156,7 @@ for i, j in indices:
 
 
 # Plot the optimized network
-fig, axes = plt.subplots(2, 2, figsize=(12, 8), layout="compressed")
+fig, axes = plt.subplots(2, 2, figsize=(10, 8), layout="compressed")
 
 ax = axes[0, 0]
 z = np.zeros((grid.size, grid.size))
@@ -164,7 +164,7 @@ norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
 sm = plt.cm.ScalarMappable(cmap=custom_cmap2, norm=norm)
 img = ax.imshow(flow_sum_neg.T, cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
-cbar = fig.colorbar(sm, ax=ax, orientation="horizontal", pad=0.1)
+cbar = fig.colorbar(sm, ax=ax, pad=0.1)
 cbar.set_label("Flow")
 
 servers = grid.get_servers()
@@ -187,14 +187,36 @@ if True:
 
     path = np.concatenate([N_filtered, E_filtered, S_filtered, W_filtered], axis=0)
     colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
+    path_points =  []
+
     for i, j, flow, direction in path:
-        i, j = int(i), int(j)
+        i, j = int(i) + 0.5, int(j) + 0.5
         i_o, j_o = i + FLOW_INDEX[direction][0], j + FLOW_INDEX[direction][1]
+        if (i, j) not in path_points:
+            path_points.append((i, j))
+        if (i_o, j_o) not in path_points:
+            path_points.append((i_o, j_o))
 
-        ax.scatter(i + 0.5, j + 0.5, color=colors[int(i-0.5)], zorder=10)
-        ax.scatter(i_o + 0.5, j_o + 0.5, color=colors[int(i-0.5)], zorder=10)
+    users = grid.get_users()
+    user_points = []
+    for user in users:
+        point = (user[1] + 0.5, user[2] + 0.5)
+        if point not in path_points:
+            user_points.append(point)
 
-        # ax.plot([i, i_o], [j, j_o], color=colors[int(i-0.5)], alpha=1, lw=2, zorder=8)
+    servers = grid.get_servers()
+    server_points = []
+    for server in servers:
+        point = (server[1] + 0.5, server[2] + 0.5)
+        if point not in path_points:
+            server_points.append(point)
+
+    # Sort the path points
+    path_points = sorted(path_points, key=lambda x: x[0]**2+x[1]**2)
+    path_points.insert(0, user_points[0])
+
+    for pair in zip(path_points[:-1], path_points[1:]):
+        ax.plot(*zip(*pair), color=colors[0], zorder=8)
 
 
 # ax.set_xticks(np.arange(0.5, grid.size, 1))
