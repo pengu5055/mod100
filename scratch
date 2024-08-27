@@ -1,0 +1,12 @@
+for i, j, flow, direction in path:
+        i, j = int(i)+0.5, int(j)+0.5
+        R = np.array([[0, -1], [1, 0]])
+        FI = np.array(FLOW_INDEX[direction])
+        i_o = i + FI[0]
+        j_o = j + FI[1]
+        if FI[0] != 0:
+            i_n = i + (R@FI)[0]
+            j_n = j + (R@FI)[1]
+        else:
+            i_n = i + (R@FI)[1]
+            j_n = j + (R@FI)[0]

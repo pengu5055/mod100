@@ -122,83 +122,47 @@ lp_problem.solve(pulp.GUROBI(msg=True, warmStart=True))
 print("Status:", pulp.LpStatus[lp_problem.status])
 
 # Get the optimized flow values
-flow_values = np.zeros((grid.size, grid.size, 4))
-flow_pos = np.zeros((grid.size, grid.size, 4))
-flow_neg = np.zeros((grid.size, grid.size, 4))
+flow_pos = {
+    'N': [],
+    'E': [],
+    'S': [],
+    'W': []
+}
+flow_neg = {
+    'N': [],
+    'E': [],
+    'S': [],
+    'W': []
+}
+
 max_flow = 0
 for i, j in indices:
-    for k, direction in enumerate(four_flow.keys()):
-        max_flow_attempt = max(four_flow_positive[direction][(i, j)].value(), four_flow_negative[direction][(i, j)].value())
-        max_flow = max(max_flow, max_flow_attempt)
-        val = four_flow_positive[direction][(i, j)].value() - four_flow_negative[direction][(i, j)].value()
-        flow_values[i, j, k] = val
-        flow_pos[i, j, k] = four_flow_positive[direction][(i, j)].value()
-        flow_neg[i, j, k] = four_flow_negative[direction][(i, j)].value()
+    flow_pos['N'].append((i, j, four_flow_positive['N'][(i, j)].value(), "N"))
+    flow_pos['E'].append((i, j, four_flow_positive['E'][(i, j)].value(), "E"))
+    flow_pos['S'].append((i, j, four_flow_positive['S'][(i, j)].value(), "S"))
+    flow_pos['W'].append((i, j, four_flow_positive['W'][(i, j)].value(), "W"))
 
-if max_flow == 0:
-    quit()
+    flow_neg['N'].append((i, j, four_flow_negative['N'][(i, j)].value(), "N"))
+    flow_neg['E'].append((i, j, four_flow_negative['E'][(i, j)].value(), "E"))
+    flow_neg['S'].append((i, j, four_flow_negative['S'][(i, j)].value(), "S"))
+    flow_neg['W'].append((i, j, four_flow_negative['W'][(i, j)].value(), "W"))
 
-# Print locations of all non-zero flow values
-for i in range(grid.size):
-    for j in range(grid.size):
-        if np.sum(flow_values[i, j]) != 0:
-            print(i, j, flow_values[i, j])
+    max_flow_attempt = max(four_flow_positive[direction][(i, j)].value(), four_flow_negative[direction][(i, j)].value())
+    max_flow = max(max_flow, max_flow_attempt)
 
-# Change 0 to nan
-cp_flow_values = flow_values.copy()
-cm.set_bad(color="white")
-        
+flow_sum_neg = np.zeros((grid.size, grid.size))
+for i, j in indices:
+    flow_sum_neg[i, j] = sum([four_flow_negative[direction][(i, j)].value() for direction in four_flow.keys()])
+
+
 # Plot the optimized network
 fig, axes = plt.subplots(2, 2, figsize=(12, 8), layout="compressed")
 
 ax = axes[0, 0]
-norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
-sm = plt.cm.ScalarMappable(cmap=cm, norm=norm)
-img = ax.imshow(np.sum(flow_pos, axis=2), cmap=cm, norm=norm, zorder=5, origin="lower", aspect="auto",
-                extent=[0, grid.size, 0, grid.size], alpha=1)
-cbar = fig.colorbar(sm, ax=ax, orientation="horizontal", pad=0.1)
-cbar.set_label("Flow")
-
-servers = grid.get_servers()
-s_ico = plt.imread("server_ico.png")
-for server in servers:
-    ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=12)
-
-# Plot Users
-users = grid.get_users()
-u_ico = plt.imread("user_ico.png")
-for user in users:
-    ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=12)
-
-
-# Plot Grid
-if True:
-    for i in range(grid.size):
-        for j in range(grid.size):
-            for k, dir in enumerate(FLOW_INDEX.keys()):
-                val = flow_values[i, j, k] / max_flow
-                x = i + 0.5
-                y = j + 0.5
-                if val > 0:
-                    print(cm(val))
-                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=cm(val),
-                            alpha=1, lw=2, zorder=11)
-                else:
-                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=custom_cmap2(val),
-                            alpha=1, lw=2, zorder=11)
-
-ax.set_xticks(np.arange(0.5, grid.size, 1))
-ax.set_xticklabels(np.arange(0, grid.size, 1))
-ax.set_yticks(np.arange(0.5, grid.size, 1))
-ax.set_yticklabels(np.arange(0, grid.size, 1))
-ax.set_xlim(0, grid.size)
-ax.set_ylim(0, grid.size)
-
-ax = axes[0, 1]
-
+z = np.zeros((grid.size, grid.size))
 norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
 sm = plt.cm.ScalarMappable(cmap=custom_cmap2, norm=norm)
-img = ax.imshow(np.sum(flow_neg, axis=2), cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
+img = ax.imshow(flow_sum_neg.T, cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
 cbar = fig.colorbar(sm, ax=ax, orientation="horizontal", pad=0.1)
 cbar.set_label("Flow")
@@ -214,71 +178,30 @@ u_ico = plt.imread("user_ico.png")
 for user in users:
     ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
 
-
 # Plot Grid
 if True:
-    for i in range(grid.size):
-        for j in range(grid.size):
-            for k, dir in enumerate(FLOW_INDEX.keys()):
-                val = flow_values[i, j, k] / max_flow
-                x = i + 0.5
-                y = j + 0.5
-                if val > 0:
-                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=cm(val),
-                            alpha=1, lw=2, zorder=5)
-                else:
-                    ax.plot([x, x + FLOW_INDEX[dir][0]], [y, y + FLOW_INDEX[dir][1]], color=custom_cmap2(val),
-                            alpha=1, lw=2, zorder=5)
-            # ax.plot([x, x], [y, y + 1], color="black", alpha=0.1, lw=2, zorder=5)
-            # ax.plot([x, x + 1], [y, y], color="black", alpha=0.1, lw=2, zorder=5)
-            # ax.plot([x, x + 1], [y + 1, y + 1], color="black", alpha=0.1, lw=2, zorder=10)
-            # ax.plot([x + 1, x + 1], [y, y + 1], color="black", alpha=0.1, lw=2, zorder=10)
+    N_filtered = np.array([x for x in flow_pos['N'] if x[2] > 0])
+    E_filtered = np.array([x for x in flow_pos['E'] if x[2] > 0])
+    S_filtered = np.array([x for x in flow_pos['S'] if x[2] > 0])
+    W_filtered = np.array([x for x in flow_pos['W'] if x[2] > 0])
 
-ax.set_xticks(np.arange(0.5, grid.size, 1))
-ax.set_xticklabels(np.arange(0, grid.size, 1))
-ax.set_yticks(np.arange(0.5, grid.size, 1))
-ax.set_yticklabels(np.arange(0, grid.size, 1))
+    path = np.concatenate([N_filtered, E_filtered, S_filtered, W_filtered], axis=0)
+    colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
+    for i, j, flow, direction in path:
+        i, j = int(i), int(j)
+        i_o, j_o = i + FLOW_INDEX[direction][0], j + FLOW_INDEX[direction][1]
+
+        ax.scatter(i + 0.5, j + 0.5, color=colors[int(i-0.5)], zorder=10)
+        ax.scatter(i_o + 0.5, j_o + 0.5, color=colors[int(i-0.5)], zorder=10)
+
+        # ax.plot([i, i_o], [j, j_o], color=colors[int(i-0.5)], alpha=1, lw=2, zorder=8)
+
+
+# ax.set_xticks(np.arange(0.5, grid.size, 1))
+# ax.set_xticklabels(np.arange(0, grid.size, 1))
+# ax.set_yticks(np.arange(0.5, grid.size, 1))
+# ax.set_yticklabels(np.arange(0, grid.size, 1))
 ax.set_xlim(0, grid.size)
 ax.set_ylim(0, grid.size)
-
-
-ax = axes[1, 0]
-bandwidth = grid.get_max_bandwidth()
-bool_mask = [[bandwidth[x][y] == grid[x][y].flow.sum() for y in range(grid.size)] for x in range(grid.size)]
-
-# img = ax.imshow(bool_mask, cmap="binary", zorder=5, origin="lower", aspect="auto",
-#                 extent=[0, grid.size, 0, grid.size])
-ax.imshow(bandwidth, cmap=cm, vmin=0, vmax=1, zorder=5, origin="lower", aspect="auto",
-          extent=[0, grid.size, 0, grid.size])
-
-
-ax = axes[1, 1]
-norm = mpl.colors.Normalize(vmin=-max_flow, vmax=max_flow)
-sm = plt.cm.ScalarMappable(cmap=custom_cmap2, norm=norm)
-img = ax.imshow(np.sum(flow_values, axis=2), cmap=custom_cmap2, norm=norm, zorder=5, origin="lower", aspect="auto",
-                extent=[0, grid.size, 0, grid.size], alpha=1)
-cbar = fig.colorbar(sm, ax=ax, orientation="horizontal", pad=0.1)
-cbar.set_label("Flow")
-
-# servers = grid.get_servers()
-# s_ico = plt.imread("server_ico.png")
-# for server in servers:
-#     ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=10)
-# 
-# # Plot Users
-# users = grid.get_users()
-# u_ico = plt.imread("user_ico.png")
-# for user in users:
-#     ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
-
-ax.set_xticks(np.arange(0.5, grid.size, 1))
-ax.set_xticklabels(np.arange(0, grid.size, 1))
-ax.set_yticks(np.arange(0.5, grid.size, 1))
-ax.set_yticklabels(np.arange(0, grid.size, 1))
-ax.set_xlim(0, grid.size)
-ax.set_ylim(0, grid.size)
-
 
 plt.show()
-
-            

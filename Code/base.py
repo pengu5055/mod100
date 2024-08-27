@@ -17,6 +17,13 @@ FLOW_INDEX = {
     "W": (-1, 0),
 }
 
+PLOT_FLOW_INDEX = {
+    "N": (0, 1),
+    "E": (-1, 0),
+    "S": (0, -1),
+    "W": (1, 0),
+}
+
 
 class Server:
     """
