@@ -16,9 +16,11 @@ cm = custom_cmap
 # Initiate Grid
 grid = Grid(10)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
-server = Server(0, (6, 6), 1, 1)
-user = User(0, (3, 3), 0.5, 0.5)
+server = Server(0, (6, 7), 0.8, 0.8)
 grid.add_server(server)
+# server = Server(1, (3, 6), 0.4, 0.4)
+# grid.add_server(server)
+user = User(0, (3, 0), 0.6, 0.6)
 grid.add_user(user)
 
 for ind in indices:
@@ -75,31 +77,8 @@ for i, j in indices:
             for dir in four_flow.keys():
                 lp_problem += four_flow_positive[dir][(i, j)] == 0, f"Prevent_User_Out_{dir}_{i}_{j}"
             lp_problem += pulp.lpSum([four_flow_negative[direction][(i, j)] for direction in four_flow.keys()]) <= grid[i][j].bandwidth, f"User_In_Balance_{i}_{j}"
-        
 
-# Constraint 2: Sum of flow out of servers must be equal to sum of flow into users
-# users = grid.get_users()
-# servers = grid.get_servers()
-# user_in = 0
-# server_out = 0
-# 
-# for user_data in users:
-#     _, x, y, _, _ = user_data
-#     x = int(x)
-#     y = int(y)
-#     user = grid.grid[x][y]
-#     user_in += pulp.lpSum([four_flow_negative[direction][(x, y)] for direction in four_flow.keys()])
-# 
-# for server_data in servers:
-#     _, x, y, _, _ = server_data
-#     x = int(x)
-#     y = int(y)
-#     server = grid.grid[x][y]
-#     server_out += pulp.lpSum([four_flow_positive[direction][(x, y)] for direction in four_flow.keys()])
-# 
-# lp_problem += user_in == server_out, "Flow_Balance"
-
-# Constraint 3: Continuity of flow between wires
+# Constraint 2: Continuity of flow between wires
 for i, j in indices:
     neighbors = {dir: (i + fi[0], j + fi[1]) for dir, fi in FLOW_INDEX.items()}
     for dir, neighbor in neighbors.items():
@@ -113,11 +92,8 @@ for i, j in indices:
 
 # Objective Function
 lp_problem += pulp.lpSum([[four_flow_negative["N"][(x, y)] for x, y in indices if isinstance(grid[x][y], User)] for x, y in indices if isinstance(grid[x][y], User)])
-# lp_problem += pulp.lpSum([[four_flow_negative[direction][(x, y)] for direction in four_flow.keys()] for x, y in indices if isinstance(grid[x][y], User)])             
-            
 
 # Solve the LP Problem
-# lp_problem.solve(pulp.PULP_CBC_CMD(msg=True, warmStart=True))
 lp_problem.solve(pulp.GUROBI(msg=True, warmStart=True))
 print("Status:", pulp.LpStatus[lp_problem.status])
 
@@ -161,8 +137,13 @@ for i, j in indices:
         flow_sum[direction][i, j] = four_flow[direction][(i, j)].value()
 
 flow_sum_sum = np.zeros((grid.size, grid.size))
+flow_sum_abs = np.zeros((grid.size, grid.size))
 for i, j in indices:
     flow_sum_sum[i, j] = sum([four_flow[direction][(i, j)].value() for direction in four_flow.keys()])
+    flow_sum_abs[i, j] = np.sum(np.abs([four_flow[direction][(i, j)].value() for direction in four_flow.keys()]))
+
+print("Max Flow:", max_flow)
+quit()
 
 # Plot the optimized network
 fig, axes = plt.subplots(2, 2, figsize=(10, 8), layout="compressed")
@@ -175,8 +156,8 @@ sm = plt.cm.ScalarMappable(cmap=cm2, norm=norm)
 
 img = ax.imshow(flow_sum_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
                 extent=[0, grid.size, 0, grid.size], alpha=1)
-cbar = fig.colorbar(sm, ax=ax, pad=0.1)
-cbar.set_label("Flow")
+cbar = fig.colorbar(sm, ax=ax)
+cbar.set_label("Flow Divergence")
 
 servers = grid.get_servers()
 s_ico = plt.imread("server_ico.png")
@@ -192,8 +173,8 @@ for user in users:
 # Plot Grid
 if True:
     for i in range(grid.size):
-        ax.axhline(i, color="black", lw=2, zorder=7)
-        ax.axvline(i, color="black", lw=2, zorder=7)
+        ax.axhline(i, color="#767676", lw=2, zorder=7, alpha=0.5)
+        ax.axvline(i, color="#767676", lw=2, zorder=7, alpha=0.5)
     
     # Find nonzero flow and order points with values of flow and direction
     path = []
@@ -227,8 +208,8 @@ if True:
         if point not in path_points:
             server_points.append(point)
 
-
-    colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
+    if len(path) > 0:
+        colors = cmr.take_cmap_colors("cmr.tropical", path.shape[0], cmap_range=(0, 0.85))
     path_points.insert(0, user_points[0])
 
     for pair in zip(path_points[:-1], path_points[1:]):
@@ -239,12 +220,15 @@ if True:
         val = flow_sum[dir][int(p0[0]), int(p0[1])]
         val2 = flow_sum[dir2][int(p1[0]), int(p1[1])]
         if val == val2:
-            print(val)
             val = np.abs(val)/max_flow
             ax.plot(*zip(*pair), color=cmr.tropical(val), zorder=8, lw=3)
         else:
             raise ValueError("Flow values don't match")
-
+    
+    norm = mpl.colors.Normalize(vmin=0, vmax=max_flow)
+    sm = plt.cm.ScalarMappable(cmap=cmr.tropical, norm=norm)
+    cbar2 = fig.colorbar(sm, ax=ax, orientation="horizontal")
+    cbar2.set_label("Flow")
 
 ax.set_xticks(np.arange(0.5, grid.size, 1))
 ax.set_xticklabels(np.arange(0, grid.size, 1))
@@ -252,5 +236,14 @@ ax.set_yticks(np.arange(0.5, grid.size, 1))
 ax.set_yticklabels(np.arange(0, grid.size, 1))
 ax.set_xlim(0, grid.size)
 ax.set_ylim(0, grid.size)
+
+
+ax = axes[0, 1]
+norm = mpl.colors.Normalize(vmin=flow_sum_abs.min(), vmax=flow_sum_abs.max())
+sm = plt.cm.ScalarMappable(cmap=cm, norm=norm)
+ax.imshow(flow_sum_abs.T, cmap=cm, origin="lower", norm=norm,
+          aspect="auto", zorder=5, extent=[0, grid.size, 0, grid.size])
+cbar = fig.colorbar(sm, ax=ax)
+cbar.set_label("Flow Magnitude")
 
 plt.show()
