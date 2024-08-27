@@ -4,7 +4,8 @@ Base python file to house all the base classes and functions.
 import numpy as np
 import matplotlib as mpl
 
-hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683", "#E6E6E6"] #, "#FFFFFF"]
+# hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]
+hex_colors = ["#900EA5", "#B60683", "#E6E6E6"]
 custom_cmap = mpl.colors.LinearSegmentedColormap.from_list("ma-pink", hex_colors)
 hex_colors2 = ["#2F2E2E", "#787878", "#0E90A5", "#0683B6", "#E6E6E6"] #, "#FFFFFF"]
 custom_cmap2 = mpl.colors.LinearSegmentedColormap.from_list("ma-blue", hex_colors2)
@@ -124,7 +125,7 @@ class Flow:
                  flow_S,
                  flow_W,
                  ) -> None:
-        self.EPS = 1e-8
+        self.EPS = 1e-2
         self.N = flow_N
         self.E = flow_E
         self.S = flow_S
@@ -155,7 +156,7 @@ class Grid:
                  ):
         self.size = size
         self.grid = np.zeros((size, size), dtype=object)
-        self.indices = [[x, y] for x in range(size) for y in range(size)]
+        self.indices = [(i, j) for i in range(self.size) for j in range(self.size)]
         for x in range(size):
             for y in range(size):
                 self.grid[x][y] = Wire(x * size + y, (x, y), np.random.random())
@@ -203,6 +204,33 @@ class Grid:
         output = [[u.id, u.x, u.y, u.bandwidth_in, u.bandwidth_out] for u in list_users]
 
         return np.array(output)
+    
+    def get_neighbors(self, x, y):
+        neighbors = {}
+        for dir in FLOW_INDEX.keys():
+            dx, dy = FLOW_INDEX[dir]
+            check = (int(x + dx), int(y + dy))
+            if check in self.indices:
+                neighbors[dir] = check
+            else:
+                neighbors[dir] = None
+        
+        return neighbors
+    
+    def get_direction(self, x0, y0, x1, y1):
+        if x0 == x1 and y0 == y1:
+            return None
+        
+        dx = x1 - x0
+        dy = y1 - y0
+        for dir, (ddx, ddy) in FLOW_INDEX.items():
+            if ddx == dx and ddy == dy:
+                return dir
+        
+        return None
+    
+    def get_reverse_direction(self, dir):
+        return list(FLOW_INDEX.keys())[list(FLOW_INDEX.values()).index((FLOW_INDEX[dir][0] * -1, FLOW_INDEX[dir][1] * -1))]
     
     def __str__(self):
         output = np.zeros((self.size, self.size), dtype=object)
