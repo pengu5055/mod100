@@ -14,18 +14,18 @@ colors = cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85))
 cm = custom_cmap
 
 # Initiate Grid
-grid = Grid(10)
+grid = Grid(100)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
-for ind in indices:
-    i, j = ind
-    grid[i][j].bandwidth = 0.5
+# for ind in indices:
+#     i, j = ind
+#     grid[i][j].bandwidth = 0.5
 
-server = Server(0, (6, 6), 0.7, 0.7)
-grid.add_server(server)
-server = Server(1, (3, 6), 0.7, 0.7)
-grid.add_server(server)
-user = User(0, (3, 3), 0.6, 0.6)
-grid.add_user(user)
+for i in range(1, 5):
+    server = Server(i, (60- 2*i, 3*i), 1, 1)
+    grid.add_server(server)
+for i in range(1, 5):
+    user = User(i, (3*i**2, 3*i**2), 1, 1)
+    grid.add_user(user)
 
 # Setup LP Problem
 lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
@@ -88,7 +88,8 @@ lp_problem += - pulp.lpSum([four_flow[dir][(x, y)] for dir in four_flow.keys() f
             - pulp.lpSum([four_flow[dir][(x, y)] for dir in four_flow.keys() for x, y in indices if isinstance(grid[x][y], Wire)])         
 
 # Solve LP Problem
-lp_problem.solve(pulp.GUROBI(msg=True, warmStart=True))
+# lp_problem.solve(pulp.GUROBI(msg=True, warmStart=True))
+lp_problem.solve()
 print("Status:", pulp.LpStatus[lp_problem.status])
 
 # Extract Results
@@ -158,12 +159,12 @@ for i, j, flow, _ in path:
             i0, j0 = i + 0.33, j + 0.66
             i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
             f = flow_results[dir][i, j]
-            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=5, zorder=8)
+            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=3, zorder=8)
         elif flow_results[dir][i, j] > 0:
             i0, j0 = i + 0.66, j + 0.33
             i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
             f = flow_results[dir][i, j]
-            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=5, zorder=8)
+            ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=3, zorder=8)
 
 # Compass
 if False:

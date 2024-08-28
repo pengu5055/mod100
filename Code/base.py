@@ -2,10 +2,12 @@
 Base python file to house all the base classes and functions.
 """
 import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib as mpl
+import pulp
 
 # hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]  "#3CE89E",
-hex_colors = ["#89CA53", "#B8A51B", "#000000", "#B60683", "#E6E6E6"]
+hex_colors = ["#89CA53", "#B8A51B", "#FFFFFF", "#B60683", "#900EA5"]
 custom_cmap = mpl.colors.LinearSegmentedColormap.from_list("ma-pink", hex_colors)
 hex_colors2 = ["#2F2E2E", "#787878", "#0E90A5", "#0683B6", "#E6E6E6"] #, "#FFFFFF"]
 custom_cmap2 = mpl.colors.LinearSegmentedColormap.from_list("ma-blue", hex_colors2)
@@ -264,6 +266,148 @@ class Grid:
     def __getitem__(self, key):
         return self.grid[key]
     
+    def setup_LP(self):
+        self.lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
+        self.four_flow_positive = {
+            "N": pulp.LpVariable.dicts("Flow_N_pos", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "E": pulp.LpVariable.dicts("Flow_E_pos", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "S": pulp.LpVariable.dicts("Flow_S_pos", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "W": pulp.LpVariable.dicts("Flow_W_pos", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+        }
+        self.four_flow_negative = {
+            "N": pulp.LpVariable.dicts("Flow_N_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
+            "E": pulp.LpVariable.dicts("Flow_E_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
+            "S": pulp.LpVariable.dicts("Flow_S_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
+            "W": pulp.LpVariable.dicts("Flow_W_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
+        }
+        self.four_flow = {
+            "N": pulp.LpVariable.dicts("Flow_N", self.indices, lowBound=-1, upBound=1, cat="Continuous"),
+            "E": pulp.LpVariable.dicts("Flow_E", self.indices, lowBound=-1, upBound=1, cat="Continuous"),
+            "S": pulp.LpVariable.dicts("Flow_S", self.indices, lowBound=-1, upBound=1, cat="Continuous"),
+            "W": pulp.LpVariable.dicts("Flow_W", self.indices, lowBound=-1, upBound=1, cat="Continuous"),
+        }
 
-    
+        # Set Initial Values
+        for i, j in self.indices:
+            for dir in self.four_flow.keys():
+                self.four_flow_positive[dir][(i, j)].setInitialValue(0)
+                self.four_flow_negative[dir][(i, j)].setInitialValue(0)
+
+        # Constraint 0: Build flow from positive and negative flow
+        for i, j in self.indices:
+            for dir in self.four_flow.keys():
+                self.lp_problem += self.four_flow[dir][(i, j)] == self.four_flow_positive[dir][(i, j)] - self.four_flow_negative[dir][(i, j)], f"Flow_Build_{dir}_{i}_{j}"
+
+        # Constraint 1: Flow must obey the bandwidth constraints
+        for i, j in self.indices:
+            if isinstance(self.grid[i][j], User):
+                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] for dir in self.four_flow.keys()]) == 0, f"User_Out_{i}_{j}"
+                self.lp_problem += pulp.lpSum([self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) == self.grid[i][j].bandwidth, f"User_{i}_{j}"
+            elif isinstance(self.grid[i][j], Server):
+                self.lp_problem += pulp.lpSum([self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) == 0, f"Server_In_{i}_{j}"
+                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] for dir in self.four_flow.keys()]) <= self.grid[i][j].bandwidth, f"Server_{i}_{j}"
+            elif isinstance(self.grid[i][j], Wire):
+                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] + self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) <= self.grid[i][j].bandwidth, f"Wire_{i}_{j}"
+                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] for dir in self.four_flow.keys()]) == pulp.lpSum([self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]), f"Wire_Leak_Prevention_{i}_{j}"
+
+        # Constraint 2: Continuity of Flow
+        for i, j in self.indices:
+            neighbors = self.get_neighbors(i, j)
+            for dir, neighbor in neighbors.items():
+                if neighbor is not None:
+                    self.lp_problem += self.four_flow_positive[dir][(i, j)] == self.four_flow_negative[self.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_P_{dir}_{i}_{j}"
+                    self.lp_problem += self.four_flow_negative[dir][(i, j)] == self.four_flow_positive[self.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_N_{dir}_{i}_{j}"
+        else:
+                    self.lp_problem += self.four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
         
+        # Define Objective Function
+        self.lp_problem += - pulp.lpSum([self.four_flow[dir][(x, y)] for dir in self.four_flow.keys() for x, y in self.indices if self.isinstance(self.grid[x][y], Server)]) \
+                           - pulp.lpSum([self.four_flow[dir][(x, y)] for dir in self.four_flow.keys() for x, y in self.indices if isinstance(self.grid[x][y], Wire)])         
+
+
+    def solve_LP(self):
+        self.lp_problem.solve()
+        print("Status:", pulp.LpStatus[self.lp_problem.status])
+
+        # Extract Results
+        self.flow_results = {dir: np.zeros((self.size, self.size)) for dir in self.four_flow.keys()}
+        self.flow_sum = np.zeros((self.size, self.size))
+        self.flow_abs_sum = np.zeros((self.size, self.size))
+        for i, j in self.indices:
+            for dir in self.four_flow.keys():
+                self.flow_results[dir][i][j] = self.four_flow[dir][(i, j)].value()
+                self.flow_sum[i][j] += self.flow_results[dir][i][j]
+                self.flow_abs_sum[i][j] += self.four_flow_positive[dir][(i, j)].value() + self.four_flow_negative[dir][(i, j)].value()
+
+        max_flow = np.max([self.flow_results[dir].max() for dir in self.four_flow.keys()])
+        if max_flow == 0:
+            print("No flow found.")
+        else:
+            print("Max Flow:", max_flow)
+
+        return self.flow_results, self.flow_sum, self.flow_abs_sum
+    
+    def plot_icons(self, ax):
+        servers = self.get_servers()
+        s_ico = plt.imread("server_ico.png")
+        for server in servers:
+            ax.imshow(s_ico, extent=[server[1], server[1] + 1, server[2], server[2] + 1], zorder=10)
+        users = self.get_users()
+        u_ico = plt.imread("user_ico.png")
+        for user in users:
+            ax.imshow(u_ico, extent=[user[1], user[1] + 1, user[2], user[2] + 1], zorder=10)
+
+    def plot_grid(self, ax):
+        for i in range(self.size):
+            ax.axhline(i, color="#767676", lw=2, zorder=7, alpha=0.5)
+            ax.axvline(i, color="#767676", lw=2, zorder=7, alpha=0.5)
+
+        ax.set_xticks(np.arange(0.5, self.size, 1))
+        ax.set_xticklabels(np.arange(0, self.size, 1))
+        ax.set_yticks(np.arange(0.5, self.size, 1))
+        ax.set_yticklabels(np.arange(0, self.size, 1))
+        ax.set_xlim(0, self.size)
+        ax.set_ylim(0, self.size)
+
+    def plot_flow(self, fig, ax, data):
+        # Find nonzero flow and order points with values of flow and direction
+        path = []
+        path_points =  []
+        for i, j in self.indices:
+            for direction in self.four_flow.keys():
+                if data[direction][i, j] != 0:
+                    path.append((i, j, data[direction][i, j], direction))
+        path = sorted(path, key=lambda x: x[2], reverse=True)
+        path = np.array(path)
+        # print(path)
+
+        cm = custom_cmap
+        norm = mpl.colors.Normalize(vmin=-self.max_flow, vmax=self.max_flow)
+        sm = plt.cm.ScalarMappable(cmap=cm, norm=norm)
+        cbar2 = fig.colorbar(sm, ax=ax, orientation="horizontal", fraction=0.046, pad=0.04)
+        cbar2.set_label("Flow")
+
+        for i, j, flow, _ in path:
+            i, j = int(i), int(j)
+            flow = float(flow)
+            for dir in self.four_flow.keys():
+                if data[dir][i, j] < 0:
+                    i0, j0 = i + 0.33, j + 0.66
+                    i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
+                    f = data[dir][i, j]
+                    ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=3, zorder=8)
+                elif data[dir][i, j] > 0:
+                    i0, j0 = i + 0.66, j + 0.33
+                    i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
+                    f = data[dir][i, j]
+                    ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=3, zorder=8)
+    
+    def plot_compass(self, ax):
+        c_center = np.array([2, 7]) + 0.5
+        ax.scatter(*c_center, color="white", s=50, zorder=10)
+        c_colors = ["blue", "yellow", "red", "green"]
+        for i, dir in enumerate(self.four_flow.keys()):
+            second = c_center + np.array(FLOW_INDEX[dir])
+            ax.plot([c_center[0], second[0]], [c_center[1], second[1]], color=c_colors[i], lw=2, zorder=9)
+            ax.text(second[0]+FLOW_INDEX[dir][0]*0.33, second[1]+FLOW_INDEX[dir][1]*0.33, dir, color=c_colors[i], fontsize=10, ha="center", va="center", zorder=10)
+
