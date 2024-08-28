@@ -10,7 +10,8 @@ import pulp
 # hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]  "#3CE89E",
 hex_colors = ["#89CA53", "#B8A51B", "#FFFFFF", "#B60683", "#900EA5"]
 custom_cmap = mpl.colors.LinearSegmentedColormap.from_list("ma-pink", hex_colors)
-hex_colors2 = ["#2F2E2E", "#787878", "#0E90A5", "#0683B6", "#E6E6E6"] #, "#FFFFFF"]
+# hex_colors2 = ["#2F2E2E", "#787878", "#0E90A5", "#0683B6", "#E6E6E6"] #, "#FFFFFF"]
+hex_colors2 = ["#D1233C", "#000000", "#00E8C8"]
 custom_cmap2 = mpl.colors.LinearSegmentedColormap.from_list("ma-blue", hex_colors2)
 
 # Flow Directions to Index Mapping
@@ -128,7 +129,7 @@ class Flow:
                  flow_S,
                  flow_W,
                  ) -> None:
-        self.EPS = 1e-2
+        self.EPS = 1e-6
         self.N = flow_N
         self.E = flow_E
         self.S = flow_S
@@ -163,6 +164,13 @@ class Grid:
         for x in range(size):
             for y in range(size):
                 self.grid[x][y] = Wire(x * size + y, (x, y), np.random.random())
+        self.randomizer = np.random.random()
+    
+    def rerandomize(self, randomizer):
+        self.randomizer = randomizer
+        for x in range(self.size):
+            for y in range(self.size):
+                self.grid[x][y].bandwidth = self.randomizer()
 
     def add_server(self, server):
         self.grid[server.position] = server
@@ -313,7 +321,7 @@ class Grid:
                 self.lp_problem += pulp.lpSum([self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) == 0, f"Server_In_{i}_{j}"
                 self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] for dir in self.four_flow.keys()]) <= self.grid[i][j].bandwidth, f"Server_{i}_{j}"
             elif isinstance(self.grid[i][j], Wire):
-                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] + self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) <= self.grid[i][j].bandwidth, f"Wire_{i}_{j}"
+                self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] + self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]) <= 2*self.grid[i][j].bandwidth, f"Wire_{i}_{j}"
                 self.lp_problem += pulp.lpSum([self.four_flow_positive[dir][(i, j)] for dir in self.four_flow.keys()]) == pulp.lpSum([self.four_flow_negative[dir][(i, j)] for dir in self.four_flow.keys()]), f"Wire_Leak_Prevention_{i}_{j}"
 
         # Constraint 2: Continuity of Flow
@@ -375,9 +383,9 @@ class Grid:
         ax.set_xlim(0, self.size)
         ax.set_ylim(0, self.size)
 
-    def plot_flow(self, fig, ax, data):
-        cm2 = cmr.get_sub_cmap("cmr.redshift", 0.2, 0.8)
-        norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+    def plot_flow_divergence(self, fig, ax):
+        cm2 = cmr.get_sub_cmap(custom_cmap2, 0.1, 0.9)
+        norm = mpl.colors.Normalize(vmin=-self.max_flow, vmax=self.max_flow)
         sm = plt.cm.ScalarMappable(cmap=cm2, norm=norm)
 
         img = ax.imshow(self.flow_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
@@ -385,6 +393,7 @@ class Grid:
         cbar = fig.colorbar(sm, ax=ax, orientation="vertical", fraction=0.046, pad=0.04)
         cbar.set_label("Flow Divergence")
 
+    def plot_flow(self, fig, ax, data):
         # Find nonzero flow and order points with values of flow and direction
         path = []
         for i, j in self.indices:
@@ -405,12 +414,14 @@ class Grid:
             i, j = int(i), int(j)
             flow = float(flow)
             for dir in self.four_flow.keys():
-                if data[dir][i, j] < 0:
+                if data[dir][i, j] == 0:
+                    continue
+                elif data[dir][i, j] < -self.grid[i, j].flow.EPS:
                     i0, j0 = i + 0.33, j + 0.66
                     i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
                     f = data[dir][i, j]
                     ax.plot([i0, i_next], [j0, j_next], color=cm(norm(f)), lw=3, zorder=8)
-                elif data[dir][i, j] > 0:
+                elif data[dir][i, j] > self.grid[i, j].flow.EPS:
                     i0, j0 = i + 0.66, j + 0.33
                     i_next, j_next = i0 + FLOW_INDEX[dir][0], j0 + FLOW_INDEX[dir][1]
                     f = data[dir][i, j]
@@ -425,3 +436,13 @@ class Grid:
             ax.plot([c_center[0], second[0]], [c_center[1], second[1]], color=c_colors[i], lw=2, zorder=9)
             ax.text(second[0]+FLOW_INDEX[dir][0]*0.33, second[1]+FLOW_INDEX[dir][1]*0.33, dir, color=c_colors[i], fontsize=10, ha="center", va="center", zorder=10)
 
+    def plot_wire_bandwidths(self, fig, ax):
+        wires = self.get_wires()
+        cmap = plt.get_cmap("gray_r")
+        cmap.set_bad(color="black")
+        img = ax.imshow(wires.T, cmap=cmap, vmin=0, vmax=1, zorder=5, origin="lower",
+                        extent=[0, self.size, 0, self.size])
+        cbar = fig.colorbar(img, ax=ax, pad=0.1)
+        cbar.set_label("Bandwidth")
+        cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+        cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
