@@ -4,6 +4,7 @@ Base python file to house all the base classes and functions.
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import cmasher as cmr
 import pulp
 
 # hex_colors = ["#2F2E2E", "#787878", "#900EA5", "#B60683"]  # , "#E6E6E6"] #, "#FFFFFF"]  "#3CE89E",
@@ -266,6 +267,11 @@ class Grid:
     def __getitem__(self, key):
         return self.grid[key]
     
+    def derandomize(self, value):
+        for ind in self.indices:
+            i, j = ind
+            self.grid[i][j].bandwidth = value
+    
     def setup_LP(self):
         self.lp_problem = pulp.LpProblem("Network_Flow", pulp.LpMaximize)
         self.four_flow_positive = {
@@ -275,10 +281,10 @@ class Grid:
             "W": pulp.LpVariable.dicts("Flow_W_pos", self.indices, lowBound=0, upBound=1, cat="Continuous"),
         }
         self.four_flow_negative = {
-            "N": pulp.LpVariable.dicts("Flow_N_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
-            "E": pulp.LpVariable.dicts("Flow_E_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
-            "S": pulp.LpVariable.dicts("Flow_S_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
-            "W": pulp.LpVariable.dicts("Flow_W_neg", self.ndices, lowBound=0, upBound=1, cat="Continuous"),
+            "N": pulp.LpVariable.dicts("Flow_N_neg", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "E": pulp.LpVariable.dicts("Flow_E_neg", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "S": pulp.LpVariable.dicts("Flow_S_neg", self.indices, lowBound=0, upBound=1, cat="Continuous"),
+            "W": pulp.LpVariable.dicts("Flow_W_neg", self.indices, lowBound=0, upBound=1, cat="Continuous"),
         }
         self.four_flow = {
             "N": pulp.LpVariable.dicts("Flow_N", self.indices, lowBound=-1, upBound=1, cat="Continuous"),
@@ -317,11 +323,11 @@ class Grid:
                 if neighbor is not None:
                     self.lp_problem += self.four_flow_positive[dir][(i, j)] == self.four_flow_negative[self.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_P_{dir}_{i}_{j}"
                     self.lp_problem += self.four_flow_negative[dir][(i, j)] == self.four_flow_positive[self.get_reverse_direction(dir)][neighbor], f"Flow_Continuity_N_{dir}_{i}_{j}"
-        else:
+                else:
                     self.lp_problem += self.four_flow[dir][(i, j)] == 0, f"Flow_Continuity_{dir}_{i}_{j}"
         
         # Define Objective Function
-        self.lp_problem += - pulp.lpSum([self.four_flow[dir][(x, y)] for dir in self.four_flow.keys() for x, y in self.indices if self.isinstance(self.grid[x][y], Server)]) \
+        self.lp_problem += - pulp.lpSum([self.four_flow[dir][(x, y)] for dir in self.four_flow.keys() for x, y in self.indices if isinstance(self.grid[x][y], Server)]) \
                            - pulp.lpSum([self.four_flow[dir][(x, y)] for dir in self.four_flow.keys() for x, y in self.indices if isinstance(self.grid[x][y], Wire)])         
 
 
@@ -339,11 +345,11 @@ class Grid:
                 self.flow_sum[i][j] += self.flow_results[dir][i][j]
                 self.flow_abs_sum[i][j] += self.four_flow_positive[dir][(i, j)].value() + self.four_flow_negative[dir][(i, j)].value()
 
-        max_flow = np.max([self.flow_results[dir].max() for dir in self.four_flow.keys()])
-        if max_flow == 0:
+        self.max_flow = np.max([self.flow_results[dir].max() for dir in self.four_flow.keys()])
+        if self.max_flow == 0:
             print("No flow found.")
         else:
-            print("Max Flow:", max_flow)
+            print("Max Flow:", self.max_flow)
 
         return self.flow_results, self.flow_sum, self.flow_abs_sum
     
@@ -370,9 +376,17 @@ class Grid:
         ax.set_ylim(0, self.size)
 
     def plot_flow(self, fig, ax, data):
+        cm2 = cmr.get_sub_cmap("cmr.redshift", 0.2, 0.8)
+        norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+        sm = plt.cm.ScalarMappable(cmap=cm2, norm=norm)
+
+        img = ax.imshow(self.flow_sum.T, cmap=cm2, norm=norm, zorder=5, origin="lower", aspect="auto",
+                        extent=[0, self.size, 0, self.size], alpha=1)
+        cbar = fig.colorbar(sm, ax=ax, orientation="vertical", fraction=0.046, pad=0.04)
+        cbar.set_label("Flow Divergence")
+
         # Find nonzero flow and order points with values of flow and direction
         path = []
-        path_points =  []
         for i, j in self.indices:
             for direction in self.four_flow.keys():
                 if data[direction][i, j] != 0:
