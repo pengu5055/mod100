@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -267,39 +267,62 @@ LaTeX Info: Redefining \cpagerefrange on input line 2370.
 LaTeX Info: Redefining \Cpagerefrange on input line 2370.
 LaTeX Info: Redefining \labelcref on input line 2370.
 LaTeX Info: Redefining \labelcpageref on input line 2370.
+) (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen164
+\captionmargin@=\dimen165
+\captionwidth=\dimen166
+\caption@tempdima=\dimen167
+\caption@indent=\dimen168
+\caption@parindent=\dimen169
+\caption@hangindent=\dimen170
+Package caption Info: Standard document class detected.
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 18.
+\c@caption@flags=\count287
+\c@continuedfloat=\count288
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: wrapfig package is loaded.
+)
+\c@subfigure=\count289
+\c@subtable=\count290
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 19.
  (/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip53
 \bibsep=\skip54
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count287
+\c@NAT@ctr=\count291
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count288
+\l__color_backend_stack_int=\count292
 \l__pdf_internal_box=\box55
 ) (./mod100.aux)
 \openout1 = `mod100.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -337,16 +360,16 @@ LaTeX Font Info:    ... okay on input line 40.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count289
-\scratchdimen=\dimen164
+\scratchcounter=\count293
+\scratchdimen=\dimen171
 \scratchbox=\box56
-\nofMPsegments=\count290
-\nofMParguments=\count291
+\nofMPsegments=\count294
+\nofMParguments=\count295
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count292
-\MPscratchDim=\dimen165
-\MPnumerator=\count293
-\makeMPintoPDFobject=\count294
+\MPscratchCnt=\count296
+\MPscratchDim=\dimen172
+\MPnumerator=\count297
+\makeMPintoPDFobject=\count298
 \everyMPtoPDFconversion=\toks27
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -360,7 +383,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 149.
 )
-Package hyperref Info: Link coloring ON on input line 40.
+Package hyperref Info: Link coloring ON on input line 41.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -368,24 +391,26 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count295
+\c@section@level=\count299
 )
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
+LaTeX Info: Redefining \ref on input line 41.
+LaTeX Info: Redefining \pageref on input line 41.
+LaTeX Info: Redefining \nameref on input line 41.
  (./mod100.out) (./mod100.out)
 \@outlinefile=\write3
 \openout3 = `mod100.out'.
 
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 <logo_fmf.pdf, id=28, 233.03412pt x 141.6228pt>
 File: logo_fmf.pdf Graphic file (type pdf)
 <use logo_fmf.pdf>
-Package pdftex.def Info: logo_fmf.pdf  used on input line 45.
+Package pdftex.def Info: logo_fmf.pdf  used on input line 46.
 (pdftex.def)             Requested size: 170.71652pt x 103.75114pt.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./logo_fmf.pdf>]
-Package hyperref Info: Option `pageanchor' set `true' on input line 70.
+Package hyperref Info: Option `pageanchor' set `true' on input line 71.
  (./mod100.toc
 LaTeX Font Info:    Trying to load font information for U+msa on input line 5.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -399,85 +424,106 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout4 = `mod100.toc'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--85
+Underfull \hbox (badness 10000) in paragraph at lines 82--86
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 86--93
+Underfull \hbox (badness 10000) in paragraph at lines 87--94
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 110--117
+Underfull \hbox (badness 10000) in paragraph at lines 111--118
 
  []
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.120 \begin{quote}
+l.121 \begin{quote}
                     [1]
-Underfull \hbox (badness 10000) in paragraph at lines 139--147
+Underfull \hbox (badness 10000) in paragraph at lines 140--148
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 148--155
+Underfull \hbox (badness 10000) in paragraph at lines 149--156
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 156--165
+Underfull \hbox (badness 10000) in paragraph at lines 157--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 166--170
+Underfull \hbox (badness 10000) in paragraph at lines 167--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--176
+Underfull \hbox (badness 10000) in paragraph at lines 172--177
 
  []
 
 [2]
-<../Images/beta_dist.pdf, id=76, 578.16pt x 433.62pt>
+
+LaTeX Warning: Reference ` ar1-uniform' on page 1 undefined on input line 181.
+
+
+LaTeX Warning: Reference ` ar1-const' on page 1 undefined on input line 181.
+
+
+LaTeX Warning: Reference ` ar2-uniform' on page 1 undefined on input line 182.
+
+
+LaTeX Warning: Reference ` ar2-const' on page 1 undefined on input line 182.
+
+
+LaTeX Warning: Reference `fig:ar2-beta' on page 1 undefined on input line 182.
+
+<../Images/arbitrary-1-beta.pdf, id=76, 578.16pt x 433.62pt>
+File: ../Images/arbitrary-1-beta.pdf Graphic file (type pdf)
+<use ../Images/arbitrary-1-beta.pdf>
+Package pdftex.def Info: ../Images/arbitrary-1-beta.pdf  used on input line 188.
+(pdftex.def)             Requested size: 227.62206pt x 170.71231pt.
+<../Images/arbitrary-1-constant.pdf, id=77, 578.16pt x 433.62pt>
+File: ../Images/arbitrary-1-constant.pdf Graphic file (type pdf)
+<use ../Images/arbitrary-1-constant.pdf>
+Package pdftex.def Info: ../Images/arbitrary-1-constant.pdf  used on input line 193.
+(pdftex.def)             Requested size: 227.62206pt x 170.71231pt.
+<../Images/beta_dist.pdf, id=79, 578.16pt x 433.62pt>
 File: ../Images/beta_dist.pdf Graphic file (type pdf)
 <use ../Images/beta_dist.pdf>
-Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 193.
+Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 211.
 (pdftex.def)             Requested size: 364.19667pt x 273.14235pt.
-<../Images/optimize-case-10.pdf, id=78, 578.16pt x 433.62pt>
+[3 <../Images/arbitrary-1-beta.pdf> <../Images/arbitrary-1-constant.pdf>]
+<../Images/optimize-case-10.pdf, id=196, 578.16pt x 433.62pt>
 File: ../Images/optimize-case-10.pdf Graphic file (type pdf)
 <use ../Images/optimize-case-10.pdf>
-Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 205.
+Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 223.
 (pdftex.def)             Requested size: 418.82375pt x 314.11833pt.
- [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.209 
-       <../Images/beta_dist.pdf>] [4pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.226 \end{document}
-                     <../Images/optimize-case-10.pdf>] (./mod100.aux)
+ [4 <../Images/beta_dist.pdf>] [5 <../Images/optimize-case-10.pdf>] (./mod100.aux)
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `mod100.out' has not changed.
 (rerunfilecheck)             Checksum: 33E2BC77B73D31F962DB8CC72602A07E;694.
  ) 
 Here is how much of TeX's memory you used:
- 12237 strings out of 480247
- 200752 string characters out of 5896151
- 507766 words of memory out of 5000000
- 30010 multiletter control sequences out of 15000+600000
- 475998 words of font info for 53 fonts, out of 8000000 for 9000
+ 13581 strings out of 480247
+ 227551 string characters out of 5896151
+ 516563 words of memory out of 5000000
+ 31329 multiletter control sequences out of 15000+600000
+ 480647 words of font info for 70 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,9n,63p,334b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on mod100.pdf (5 pages, 271789 bytes).
+ 67i,9n,77p,355b,551s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on mod100.pdf (6 pages, 454003 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 129 compressed objects within 2 object streams
- 14 named destinations out of 1000 (max. 500000)
- 64 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 362 PDF objects out of 1000 (max. 8388607)
+ 170 compressed objects within 2 object streams
+ 16 named destinations out of 1000 (max. 500000)
+ 74 words of extra memory for PDF output out of 10000 (max. 10000000)
 

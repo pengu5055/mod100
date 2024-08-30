@@ -19,13 +19,21 @@ size = 10
 grid = Grid(size)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
 
-# grid.derandomize(0.7)
+grid.derandomize(0.3)
 # grid.rerandomize(lambda: np.random.beta(10, 10)) 
 
-user = User(0, (size-1, size-1), 0.5, 0.5)
-server = Server(0, (0, 0), 1, 1)
-grid.add_server(server)
-grid.add_user(user)
+# Put users in corners
+for i in range(0, size, size-1):
+    for j in range(0, size, size-1):
+        user = User(i, (i, j), 0.5, 0.5)
+        grid.add_user(user)
+
+# Put servers in the middle
+for i in range(int(0.4*size), int(0.6*size)):
+    server = Server(i, (i, int(0.5*size)), 1, 1)
+    server2 = Server(i, (i, int(0.5*size)-1), 1, 1)
+    grid.add_server(server)
+    grid.add_server(server2)
 
 
 # Setup LP Problem
@@ -45,7 +53,7 @@ grid.plot_wire_bandwidths(fig, ax[0])
 
 ax[0].set_yticks(np.arange(0, size, 10))
 ax[0].set_xticks(np.arange(0, size, 10))
-ax[0].set_title("Uniform Bandwidth Distribution")
+ax[0].set_title("Costant Wire Bandwidth of 0.3")
 ax[0].set_aspect('equal')
 if False:
     servers = grid.get_servers()
@@ -64,5 +72,5 @@ if False:
     ax[1].set_xlabel("Bandwidth")
     ax[1].set_ylabel("Frequency")
 
-plt.savefig(f"./Images/arbitrary-2-uniform.pdf", dpi=500)
+plt.savefig(f"./Images/arbitrary-1-constant-sub.pdf", dpi=500)
 plt.show()
