@@ -272,7 +272,7 @@ flow rates.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{../Images/optimize-case-10.pdf}
-    \caption{Flow rate divergence in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$.}
+    \caption{Flow rate in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$.}
     \label{fig:basic_grid}
 \end{figure}
 
@@ -285,6 +285,19 @@ to carry the data over from the second server and to place the original connecti
 The same results can be seen for grids of larger sizes. I've plotted the results for a $30\times 30$ grid and 
 a $100\times 100$ grid in \textcolor{red}{\Cref{fig:opt-30-100}}. The bandwidths of the wires here were also sampled from a beta distribution
 with $\alpha = 10$ and $\beta = 2$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{../Images/optimize-30-100.pdf}
+    \caption{Flow rate in a $30\times 30$ and $100\times 100$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$.}
+    \label{fig:opt-30-100}  
+\end{figure}
+
+No lie, that the individual paths here are much harder to see but the general flow of data is still very clear. I'd like to 
+point the readers attention to the small white bridges that form in both cases but are more prevalent on the larger grid. These are 
+very small almost zero flows that probably happen as an artifact of the method. I've added an $\varepsilon$ tolerance 
+to the flow rates to avoid numerical instability but these were just slightly above the threshold. I kept them regardless to 
+show that the model does also make some nonsensical connections with extremely small flow rates. \\
 
 
 \section{Conclusion and Comments}
