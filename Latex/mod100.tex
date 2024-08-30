@@ -259,7 +259,7 @@ the skewness of the distribution.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{../Images/beta_dist.pdf}
+    \includegraphics[width=0.7\textwidth]{../Images/beta_dist.pdf}
     \caption{Probability density function of the beta distribution for different values of the shape parameters $\alpha$ and $\beta$.}
     \label{fig:beta_dist}
 \end{figure}
@@ -271,7 +271,7 @@ flow rates.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{../Images/optimize-case-10.pdf}
+    \includegraphics[width=0.8\textwidth]{../Images/optimize-case-10.pdf}
     \caption{Flow rate divergence in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$.}
     \label{fig:basic_grid}
 \end{figure}
@@ -281,7 +281,10 @@ as linearly as possible from the Users to the Servers, however due to the object
 the flow rates are not uniform. We can see on the left-hand side of the grid that the flow is higher for the second server and lower 
 for the first. The first user receives data from both these servers as a portion of the data is carried over from the second 
 server. This is likely due to wires in the direct path to the first server having lower bandwidths, thus making it cheaper 
-to carry the data over from the second server and to place the original connection to the first user slightly to the side.
+to carry the data over from the second server and to place the original connection to the first user slightly to the side. 
+The same results can be seen for grids of larger sizes. I've plotted the results for a $30\times 30$ grid and 
+a $100\times 100$ grid in \textcolor{red}{\Cref{fig:opt-30-100}}. The bandwidths of the wires here were also sampled from a beta distribution
+with $\alpha = 10$ and $\beta = 2$.
 
 
 \section{Conclusion and Comments}
