@@ -15,13 +15,13 @@ colors = cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85))
 cm = custom_cmap
 
 # Initiate Grid
-size = 100
+size = 30
 grid = Grid(size)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
 
-grid.derandomize(0.7)
-# grid.rerandomize(lambda: np.random.beta(10, 2)) 
-for i in range(10, 90):
+# grid.derandomize(0.7)
+grid.rerandomize(lambda: np.random.beta(10, 2)) 
+for i in range(int(0.1*size), int(0.9*size)):
     server = Server(i, (i, 0), 1, 1)
     grid.add_server(server)
     user = User(i, (i, size-1), 0.5, 0.5)
@@ -38,10 +38,13 @@ flow_results, flow_sum, flow_abs_sum = grid.solve_LP()
 
 
 fig, ax = plt.subplots(1, 2, figsize=(12, 8), layout="compressed")
-# grid.plot_grid(ax[0])
-# grid.plot_flow(fig, ax[0], flow_results)
-# grid.plot_icons(ax[0])
-# grid.plot_wire_bandwidths(fig, ax[0])
+grid.plot_grid(ax[0])
+grid.plot_flow(fig, ax[0], flow_results)
+grid.plot_icons(ax[0])
+grid.plot_wire_bandwidths(fig, ax[0])
+ax[0].set_yticks(np.arange(0, size, 10))
+ax[0].set_xticks(np.arange(0, size, 10))
+ax[0].set_title("Optimized Grid")
 
 servers = grid.get_servers()
 server_bandwidths = [flow_abs_sum[(d[1], d[2])]for d in servers]
