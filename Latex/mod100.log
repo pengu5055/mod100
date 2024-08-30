@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -402,7 +402,7 @@ LaTeX Info: Redefining \nameref on input line 41.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-<logo_fmf.pdf, id=28, 233.03412pt x 141.6228pt>
+<logo_fmf.pdf, id=24, 233.03412pt x 141.6228pt>
 File: logo_fmf.pdf Graphic file (type pdf)
 <use logo_fmf.pdf>
 Package pdftex.def Info: logo_fmf.pdf  used on input line 46.
@@ -411,15 +411,7 @@ Package pdftex.def Info: logo_fmf.pdf  used on input line 46.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./logo_fmf.pdf>]
 Package hyperref Info: Option `pageanchor' set `true' on input line 71.
- (./mod100.toc
-LaTeX Font Info:    Trying to load font information for U+msa on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+ (./mod100.toc)
 \tf@toc=\write4
 \openout4 = `mod100.toc'.
 
@@ -428,7 +420,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--86
 
  []
 
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 88.
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 88.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 Underfull \hbox (badness 10000) in paragraph at lines 87--94
 
  []
@@ -468,43 +467,43 @@ Underfull \hbox (badness 10000) in paragraph at lines 172--177
  []
 
 [2]
-<../Images/arbitrary-1-beta.pdf, id=83, 578.16pt x 433.62pt>
+<../Images/arbitrary-1-beta.pdf, id=78, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-beta.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-beta.pdf>
 Package pdftex.def Info: ../Images/arbitrary-1-beta.pdf  used on input line 188.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-1-constant.pdf, id=84, 578.16pt x 433.62pt>
+<../Images/arbitrary-1-constant.pdf, id=79, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-constant.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-constant.pdf>
 Package pdftex.def Info: ../Images/arbitrary-1-constant.pdf  used on input line 193.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-1-constant-sub.pdf, id=85, 578.16pt x 433.62pt>
+<../Images/arbitrary-1-constant-sub.pdf, id=80, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-constant-sub.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-constant-sub.pdf>
 Package pdftex.def Info: ../Images/arbitrary-1-constant-sub.pdf  used on input line 202.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-1-uniform.pdf, id=86, 578.16pt x 433.62pt>
+<../Images/arbitrary-1-uniform.pdf, id=81, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-uniform.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-uniform.pdf>
 Package pdftex.def Info: ../Images/arbitrary-1-uniform.pdf  used on input line 207.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-2-beta.pdf, id=87, 578.16pt x 433.62pt>
+<../Images/arbitrary-2-beta.pdf, id=82, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-beta.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-beta.pdf>
 Package pdftex.def Info: ../Images/arbitrary-2-beta.pdf  used on input line 216.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-2-constant.pdf, id=88, 578.16pt x 433.62pt>
+<../Images/arbitrary-2-constant.pdf, id=83, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-constant.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-constant.pdf>
 Package pdftex.def Info: ../Images/arbitrary-2-constant.pdf  used on input line 221.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
  [3 <../Images/arbitrary-1-beta.pdf> <../Images/arbitrary-1-constant.pdf> <../Images/arbitrary-1-constant-sub.pdf> <../Images/arbitrary-1-uniform.pdf>]
-<../Images/arbitrary-2-constant-sub.pdf, id=315, 578.16pt x 433.62pt>
+<../Images/arbitrary-2-constant-sub.pdf, id=310, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-constant-sub.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-constant-sub.pdf>
 Package pdftex.def Info: ../Images/arbitrary-2-constant-sub.pdf  used on input line 230.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
-<../Images/arbitrary-2-uniform.pdf, id=316, 578.16pt x 433.62pt>
+<../Images/arbitrary-2-uniform.pdf, id=311, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-uniform.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-uniform.pdf>
 Package pdftex.def Info: ../Images/arbitrary-2-uniform.pdf  used on input line 235.
@@ -514,45 +513,45 @@ Underfull \hbox (badness 10000) in paragraph at lines 241--248
 
  []
 
-<../Images/beta_dist.pdf, id=318, 578.16pt x 433.62pt>
+<../Images/beta_dist.pdf, id=313, 578.16pt x 433.62pt>
 File: ../Images/beta_dist.pdf Graphic file (type pdf)
 <use ../Images/beta_dist.pdf>
-Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 262.
+Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 261.
 (pdftex.def)             Requested size: 318.66948pt x 239.0012pt.
 [4 <../Images/arbitrary-2-beta.pdf> <../Images/arbitrary-2-constant.pdf> <../Images/arbitrary-2-constant-sub.pdf> <../Images/arbitrary-2-uniform.pdf>]
-<../Images/optimize-case-10.pdf, id=540, 578.16pt x 433.62pt>
+<../Images/optimize-case-10.pdf, id=535, 578.16pt x 433.62pt>
 File: ../Images/optimize-case-10.pdf Graphic file (type pdf)
 <use ../Images/optimize-case-10.pdf>
-Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 274.
+Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 273.
 (pdftex.def)             Requested size: 364.19667pt x 273.14235pt.
  [5 <../Images/beta_dist.pdf> <../Images/optimize-case-10.pdf>]
-<../Images/optimize-30-100.pdf, id=647, 867.24pt x 433.62pt>
+<../Images/optimize-30-100.pdf, id=642, 867.24pt x 433.62pt>
 File: ../Images/optimize-30-100.pdf Graphic file (type pdf)
 <use ../Images/optimize-30-100.pdf>
-Package pdftex.def Info: ../Images/optimize-30-100.pdf  used on input line 291.
+Package pdftex.def Info: ../Images/optimize-30-100.pdf  used on input line 290.
 (pdftex.def)             Requested size: 446.13727pt x 223.06868pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 296--301
+Underfull \hbox (badness 10000) in paragraph at lines 295--300
 
  []
 
 [6 <../Images/optimize-30-100.pdf>] (./mod100.aux)
 Package rerunfilecheck Info: File `mod100.out' has not changed.
-(rerunfilecheck)             Checksum: 33E2BC77B73D31F962DB8CC72602A07E;694.
+(rerunfilecheck)             Checksum: E7627F4313ADCA5D2840AE14F693213F;539.
  ) 
 Here is how much of TeX's memory you used:
- 13656 strings out of 480247
- 230039 string characters out of 5896151
- 518614 words of memory out of 5000000
- 31392 multiletter control sequences out of 15000+600000
+ 13654 strings out of 480247
+ 230009 string characters out of 5896151
+ 518611 words of memory out of 5000000
+ 31391 multiletter control sequences out of 15000+600000
  480647 words of font info for 70 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  67i,9n,77p,358b,547s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on mod100.pdf (7 pages, 1443811 bytes).
+Output written on mod100.pdf (7 pages, 1442606 bytes).
 PDF statistics:
- 787 PDF objects out of 1000 (max. 8388607)
- 303 compressed objects within 4 object streams
- 21 named destinations out of 1000 (max. 500000)
- 109 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 781 PDF objects out of 1000 (max. 8388607)
+ 298 compressed objects within 3 object streams
+ 20 named destinations out of 1000 (max. 500000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 
