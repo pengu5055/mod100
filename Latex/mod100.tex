@@ -8,10 +8,13 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{wrapfig}
+\usepackage{float}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{bm}
+\usepackage{dirtytalk}
+\usepackage{cleveref}
 \hypersetup{colorlinks=true}
 
 % Load the natbib package for citation style
@@ -46,7 +49,9 @@
 
 \vspace{5cm}
 \vspace{0.5cm}
-{\huge\textbf{Distribution of Data Transmission in a Randomized Computer Network}} \\
+{\huge\textbf{Distribution of Data Transmission in a}} \\
+\vspace{0.2cm}
+{\huge\textbf{Randomized Computer Network}} \\
 \vspace{0.5cm}
 {\large\textbf{Final Assignment for Model Analysis 1, 2023/24}}
 
@@ -165,6 +170,25 @@ divergence is used here to describe data that is either consumed or produced by 
 must thus be zero at all nodes except for the Users and Servers. 
 
 \section{Results}
+\subsection{Basic Configuration}
+First I ran the simulation for a $30\times 30$ grid with wires having bandwidths between $0$ and $1$. It is important to note 
+that the bandwidths were not sampled uniformly but rather from a beta distribution. The beta distribution is a 
+continuous probability distribution that is defined on the interval $[0, 1]$. It is a good choice for this problem
+since we can easily skew the distribution towards the lower or higher bandwidths. Having a uniform distribution yielded 
+grids that were infeasible to solve. The \textcolor{red}{\Cref{fig:beta_dist}} shows the probability density function
+of the beta distribution for different values of the shape parameters $\alpha$ and $\beta$. The shape parameters determine
+the skewness of the distribution. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../Images/beta_dist.pdf}
+    \caption{Probability density function of the beta distribution for different values of the shape parameters $\alpha$ and $\beta$.}
+    \label{fig:beta_dist}
+\end{figure}
+
+
+
+
 \section{Conclusion and Comments}
 
 % Add references
