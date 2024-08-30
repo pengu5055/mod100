@@ -20,7 +20,7 @@ for a, b in [(0.5, 0.5), (1, 1), (2, 3), (8, 4), (10, 0.1), (10, 2), (10, 5)]:
     ax.plot(x, y, label=f"$\\alpha$={a}, $\\beta$={b}", lw=3, color=colors.pop(0))
 
 ax.legend()
-ax.set_title("Beta Distribution")
+ax.set_title("Beta Distribution Probability Density Function")
 ax.set_xlabel("x")
 ax.set_ylabel("PDF")
 plt.savefig("./Images/beta_dist.pdf", dpi=500)

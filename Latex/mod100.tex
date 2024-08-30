@@ -163,11 +163,19 @@ rate into a User is determined by its bandwidth. The way I've set up the constra
 maximum amount of data they can consume unconditionally while the servers are allowed to process data at
 a rate that is less than or equal to their bandwidth. \\
 
+The objective function of the linear problem is to satisfy the demands of the users while minimizing the flow rates 
+through the network and minimizing server loads. The flow rates are minimized by minimizing the sum of the positive and
+negative parts of the flow rates. The server loads are minimized by minimizing the sum of the flow rates into the servers.
+The objective function is thus a linear combination of the flow rates and server loads. \\
+
 The way the problem has been set up results in two sets of data for flow rates, one for the positive part and
 one for the negative part. The two are equal in magnitude but opposite in sign and we can consider the real 
 solution to be one or the other. The flow rate divergence is thus given by the sum of the two. The term flow rate 
 divergence is used here to describe data that is either consumed or produced by the network. The flow rate divergence
-must thus be zero at all nodes except for the Users and Servers. 
+must thus be zero at all nodes except for the Users and Servers. \\
+
+To stick with the purpose of having a home-brewed simulation I also drew some icons for the Users and Servers in a pixel 
+art style. 
 
 \section{Results}
 \subsection{Basic Configuration}
@@ -186,7 +194,24 @@ the skewness of the distribution.
     \label{fig:beta_dist}
 \end{figure}
 
+We can see the results of a basic simulation for a $10\times 10$ grid in \textcolor{red}{\Cref{fig:basic_grid}}. The wires 
+in this grid have bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$. For illustrative purposes
+I've colored the nodes based on their flow rate divergence and plotted both the positive and negative parts of the 
+flow rates.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../Images/optimize-case-10.pdf}
+    \caption{Flow rate divergence in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$.}
+    \label{fig:basic_grid}
+\end{figure}
+
+We can see that the flow rate divergence is zero at all nodes except for the Users and Servers. The flow of data goes almost 
+as linearly as possible from the Users to the Servers, however due to the objective functions demand to minimize server loads 
+the flow rates are not uniform. We can see on the left-hand side of the grid that the flow is higher for the second server and lower 
+for the first. The first user receives data from both these servers as a portion of the data is carried over from the second 
+server. This is likely due to wires in the direct path to the first server having lower bandwidths, thus making it cheaper 
+to carry the data over from the second server and to place the original connection to the first user slightly to the side.
 
 
 \section{Conclusion and Comments}
