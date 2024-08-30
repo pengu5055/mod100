@@ -1,0 +1,133 @@
+% This is a LaTeX template kindly taken from Jernej Debevec.
+% Provided by Miha Muskinja for the purpose of the seminar I in the 1st year
+% of the 2nd cycle of the study of physics at the Faculty of Mathematics and Physics, University of Ljubljana.
+
+% Set the document class and options
+\documentclass[10pt, titlepage, a4paper]{article}
+\usepackage[a4paper, inner=2.5cm, outer=2.5cm, top=2.25cm, bottom=2.25cm]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{bm}
+\hypersetup{colorlinks=true}
+
+% Load the natbib package for citation style
+\usepackage{natbib}
+
+% Some macros for commonly used symbols in physics/quantum mechanics
+\newcommand{\bb}[1]{\bm#1}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\pp}{\partial}
+\newcommand{\dg}{\dagger}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\id}{\mathbb{1}}
+\newcommand{\T}{\mathsf{T}}
+\newcommand{\ua}{\uparrow\>}
+\newcommand{\da}{\downarrow\>}
+\newcommand{\fs}[1]{\slashed{#1}}  % Feynmann slash
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand\thickbar[1]{\accentset{\rule{.5em}{.03em}}{#1}}
+\renewcommand{\bar}{\thickbar}
+
+% Start the document
+\begin{document}
+
+% The title page
+\begin{titlepage}
+{\centering
+\includegraphics[width=6cm]{logo_fmf.pdf}
+
+\vspace{0.8cm}
+{\small Department of Physics}
+
+\vspace{5cm}
+\vspace{0.5cm}
+{\huge\textbf{Data Flow in a Randomized Computer Network}} \\
+\vspace{0.5cm}
+{\large\textbf{Final Assignment for Model Analysis 1, 2023/24}}
+
+\vfill
+\textbf{Author:} Marko Urbanč \\
+\textbf{Professor:} Prof. Dr. Simon Širca \\ 
+\textbf{Advisor:}  doc. dr. Miha Mihovilovič \\
+
+\vspace{1cm}
+Ljubljana, August 2024 \\
+}
+\vspace{3cm}
+\end{titlepage}
+
+% Add table of conents
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\setcounter{page}{2}
+\tableofcontents
+\vspace{1cm}
+
+% Proceed with the main body
+\pagenumbering{arabic}
+
+% Sections based on typical Model Analysis structure
+\section{Introduction}
+The scope of computer networks has been expanding rapidly in the past few decades. What once were simple 
+networks of interconnected computers have now evolved into complex systems that are used for a wide range of
+applications. It makes sense then for one to plan and analyze the flow of data in such networks to ensure that
+they are efficient and reliable and thus cheaper to maintain. \\
+
+As my final assignment for Model Analysis 1, I opted to simulate the flow of data in a randomized computer network. The network 
+consists of a $N\times N$ grid, where each unit of the grid can be a server, a user or a wire used to connect the two. Each of these 
+units is connected to its four nearest neighbors and has a value associated with it that specifies it's bandwidth. For wires this is the 
+maximum data throughput, for servers it is the maximum data processing rate and for users it is the maximum data consumption rate. We'd like 
+to find the distribution of server-loads for a grid of wires with random bandwidths. It is possible to study many different types of 
+server and user placements but the most interesting one to us will be where we have the users and servers placed on the top and bottom 
+rows of the grid, respectively. \\
+
+We can solve for the flow rates through the network by solving a set of constrained linear equations. This field of study is
+known as linear programming and is a powerful tool for solving optimization problems. We've already seen some linear programming 
+use in the second task of this course \texttt{mod102} where we created a dietary plan from a set of given foods based on their costs 
+and nutritional values. For the sake of completeness it makes sense to quickly go over the basics of linear programming before we
+proceed with the simulation. Linear programming uses linear optimization to find the maximum or minimum of a linear function
+subject to a set of linear constraints. This function is known as the objective function and is quite analogous to the cost 
+function we've seen mentioned in the world of Machine Learning. The constraints are linear inequalities or equations that
+define the feasible region of the problem. Mathematically formulated we can consider a cost function $f(x)$ and a set of 
+constraints defined as:
+%
+\begin{gather*}
+    f(x_1, x_2, \dots, x_n) = c_1x_1 + c_2x_2 + \dots + c_nx_n\>, \\
+    a_{11}x_1 + a_{12}x_2 + \dots + a_{1n}x_n \leq b_1\>, \\
+    a_{21}x_1 + a_{22}x_2 + \dots + a_{2n}x_n \leq b_2\>, \\
+    \vdots \\
+    a_{m1}x_1 + a_{m2}x_2 + \dots + a_{mn}x_n \leq b_m\>.
+\end{gather*}
+%
+The goal is then to find the values of $x_1, x_2, \dots, x_n$ that maximize or minimize the cost function $f(x)$ while satisfying
+the constraints. The feasible region is the set of all points that satisfy the constraints and the optimal solution is the point in
+the feasible region that maximizes or minimizes the cost function. That is all that is necessary from a mathematical perspective. Of course 
+the actual implementation of solvers for such problems are much more complex and involve a lot of optimization techniques but that is 
+not the focus of this assignment. \\
+
+\section{Task}
+The original text of the assignment reads as follows:
+\begin{quote}
+    \centering
+    \textbf{Razporejanje prenosa podatkov po omrežju:} Za model omrežja vzemi $N\times N$ kvadratno mrežo, vsak rob pa ima naključno 
+    maksimalno hitrost povezave med $0$ in $1$. Vozlišča na zgornjem robu so internetni odjemalci, spodnji rob pa so strežniki. V notranjih
+    vozliščih velja 1. Kirchhoffov zakon. S pomočjo linearnega programiranja določi, kolikšne hitrosti prenosa imajo strežniki in odjemalci, 
+    ko je skupna hitrost prenosa največja. Ker gre za naključna omrežja, si oglej tudi statistično porazdelitev zanimivih količin.
+\end{quote}
+
+\section{Solution Overview}
+\section{Results}
+\section{Conclusion and Comments}
+
+% Add references
+% \newpage
+% \bibliographystyle{unsrt}
+% \bibliography{mod100}
+
+% End document
+\end{document}
