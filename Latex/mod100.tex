@@ -238,6 +238,14 @@ $0.5$ while each server could supply a flow rate of $1$.
     \end{subfigure}
 \end{figure}
 
+I think that the effect of changing the distribution of the bandwidths is extremely clear as it is well pronounced in the
+results. It has a very large impact on the flow rates and path choice through the network. The beta distribution with
+$\alpha = 10$ and $\beta = 10$ is very skewed towards the higher bandwidths and thus the flow rates are very uniform. The uniformly 
+distributed bandwidths on the other hand yield a very chaotic network with a lot of wires needed to carry the data. The constant
+bandwidths are there to illustrate the effect of a clean grid with no variation in bandwidths and how additional paths are added if the 
+individual wires cannot carry the data. Personally I think the patterns are very pretty and I'm happy with the results given by my implementation.
+I will not claim that it was effortless to set up properly. \\
+
 
 \section{Results}
 \subsection{Basic Configuration}

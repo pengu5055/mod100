@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1725046589 "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" "mod100.pdf" "mod100" 1725046589
+["pdflatex"] 1725046816 "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" "mod100.pdf" "mod100" 1725046816
   "../Images/arbitrary-1-beta.pdf" 1725045472 111713 2966272104772ee657f491ec02b88f43 ""
   "../Images/arbitrary-1-constant-sub.pdf" 1725046040 51729 ac017dce36c7d47bc1b1ebf7e00d6cc6 ""
   "../Images/arbitrary-1-constant.pdf" 1725045242 52857 8afca90df0698f8a42a8155931ac27a6 ""
@@ -12,7 +12,7 @@
   "../Images/optimize-case-10.pdf" 1725044876 102162 325da3cd0b2c695c4922d4f13450f331 ""
   "/etc/texmf/web2c/texmf.cnf" 1721132218 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/pengu5055/.texlive2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1721133484 1405652 6dbe6b4a0b8b03aa67147fe2fddcad95 ""
-  "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" 1725046588 16392 a9f224c11785e4174836091c6edd7715 ""
+  "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" 1725046816 17242 b802b40d4fc7ff4f6ee9fc6a6001d75a ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -128,10 +128,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1721229899 4379155 98693266ff65f58d9f98aff394de12d2 ""
   "logo_fmf.pdf" 1725037975 15612 f362f770ef36c22b3204cc12be10dccd ""
-  "mod100.aux" 1725046589 6228 adea29ee963a4d198fbda330cfe186df "pdflatex"
-  "mod100.out" 1725046589 694 33e2bc77b73d31f962db8cc72602a07e "pdflatex"
-  "mod100.tex" 1725046588 16392 a9f224c11785e4174836091c6edd7715 ""
-  "mod100.toc" 1725046589 428 dc1cbc4d7941544e40f7a12235050e5d "pdflatex"
+  "mod100.aux" 1725046816 6228 adea29ee963a4d198fbda330cfe186df "pdflatex"
+  "mod100.out" 1725046816 694 33e2bc77b73d31f962db8cc72602a07e "pdflatex"
+  "mod100.tex" 1725046816 17242 b802b40d4fc7ff4f6ee9fc6a6001d75a ""
+  "mod100.toc" 1725046816 428 dc1cbc4d7941544e40f7a12235050e5d "pdflatex"
   (generated)
   "mod100.aux"
   "mod100.log"
