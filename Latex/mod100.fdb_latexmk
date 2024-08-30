@@ -1,10 +1,10 @@
 # Fdb version 3
-["pdflatex"] 1725044877 "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" "mod100.pdf" "mod100" 1725044877
+["pdflatex"] 1725045370 "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" "mod100.pdf" "mod100" 1725045371
   "../Images/beta_dist.pdf" 1725043549 24016 d50270e1077a2be54459e8f5b54ad2e2 ""
   "../Images/optimize-case-10.pdf" 1725044876 102162 325da3cd0b2c695c4922d4f13450f331 ""
   "/etc/texmf/web2c/texmf.cnf" 1721132218 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/pengu5055/.texlive2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1721133484 1405652 6dbe6b4a0b8b03aa67147fe2fddcad95 ""
-  "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" 1725044549 13174 92cb9f92671f9a67b52abf921ece712e ""
+  "/home/pengu5055/Documents/FMF1mag/mod100/Latex/mod100.tex" 1725045370 13296 432b8607f0a9e25f4443bcd66edeb01f ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1246382020 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -103,10 +103,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1721229899 4379155 98693266ff65f58d9f98aff394de12d2 ""
   "logo_fmf.pdf" 1725037975 15612 f362f770ef36c22b3204cc12be10dccd ""
-  "mod100.aux" 1725044877 2322 87021d649b18582a530e4f6f1f386b87 "pdflatex"
-  "mod100.out" 1725044877 694 33e2bc77b73d31f962db8cc72602a07e "pdflatex"
-  "mod100.tex" 1725044549 13174 92cb9f92671f9a67b52abf921ece712e ""
-  "mod100.toc" 1725044877 428 63473d31d9976628c0bebfba3ddb7db4 "pdflatex"
+  "mod100.aux" 1725045371 2322 87021d649b18582a530e4f6f1f386b87 "pdflatex"
+  "mod100.out" 1725045371 694 33e2bc77b73d31f962db8cc72602a07e "pdflatex"
+  "mod100.tex" 1725045370 13296 432b8607f0a9e25f4443bcd66edeb01f ""
+  "mod100.toc" 1725045371 428 63473d31d9976628c0bebfba3ddb7db4 "pdflatex"
   (generated)
   "mod100.aux"
   "mod100.log"

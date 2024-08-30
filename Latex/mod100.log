@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  30 AUG 2024 21:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -446,21 +446,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 171--176
 <../Images/beta_dist.pdf, id=76, 578.16pt x 433.62pt>
 File: ../Images/beta_dist.pdf Graphic file (type pdf)
 <use ../Images/beta_dist.pdf>
-Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 192.
+Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 193.
 (pdftex.def)             Requested size: 364.19667pt x 273.14235pt.
 <../Images/optimize-case-10.pdf, id=78, 578.16pt x 433.62pt>
 File: ../Images/optimize-case-10.pdf Graphic file (type pdf)
 <use ../Images/optimize-case-10.pdf>
-Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 204.
+Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 205.
 (pdftex.def)             Requested size: 418.82375pt x 314.11833pt.
  [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.208 
+l.209 
        <../Images/beta_dist.pdf>] [4pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.225 \end{document}
+l.226 \end{document}
                      <../Images/optimize-case-10.pdf>] (./mod100.aux)
 Package rerunfilecheck Info: File `mod100.out' has not changed.
 (rerunfilecheck)             Checksum: 33E2BC77B73D31F962DB8CC72602A07E;694.
@@ -474,7 +474,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  60i,9n,63p,334b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on mod100.pdf (5 pages, 271690 bytes).
+Output written on mod100.pdf (5 pages, 271789 bytes).
 PDF statistics:
  237 PDF objects out of 1000 (max. 8388607)
  129 compressed objects within 2 object streams
