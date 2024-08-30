@@ -439,10 +439,16 @@ class Grid:
     def plot_wire_bandwidths(self, fig, ax):
         wires = self.get_wires()
         cmap = plt.get_cmap("gray_r")
-        cmap.set_bad(color="black")
-        img = ax.imshow(wires.T, cmap=cmap, vmin=0, vmax=1, zorder=5, origin="lower",
+        server_locations = [(d[1], d[2]) for d in self.get_servers()]
+        user_locations = [(d[1], d[2]) for d in self.get_users()]
+        # Remove data from server and user locations
+        for loc in server_locations + user_locations:
+            i, j = loc
+            i, j = int(i), int(j)
+            wires[i][j] = np.nan
+        img = ax.imshow(wires.T, cmap=cmap, vmin=0, vmax=1, zorder=6, origin="lower",
                         extent=[0, self.size, 0, self.size])
-        cbar = fig.colorbar(img, ax=ax, pad=0.1)
+        cbar = fig.colorbar(img, ax=ax, fraction=0.046, pad=0.04)
         cbar.set_label("Bandwidth")
         cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
         cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
