@@ -177,24 +177,67 @@ must thus be zero at all nodes except for the Users and Servers. \\
 
 To stick with the purpose of having a home-brewed simulation I also drew some icons for the Users and Servers in a pixel 
 art style. From what we've specified and implemented so far we can solve for the flow rates through an arbitrary
-network. I've drawn a few examples of a grid configuration for a $10\times 10$ grid. I've also tried to show the effect 
-of changing the way the bandwidths of wires are sampled. The results can be seen \textcolor{red}{\Cref{fig:ar1-beta, ar1-const, ar1-uniform}} and 
-\textcolor{red}{\Cref{fig:ar2-beta, ar2-const, ar2-uniform}}. In all examples each of the users demanded a flow rate of 
+network. I've drawn two examples for arbitrary grid configurations on a $10\times 10$ grid. I've also tried to show the effect 
+of changing the way the bandwidths of wires are sampled. The results can be seen \textcolor{red}{\Cref{fig:ar1-beta,fig:ar1-const,fig:ar1-const-sub,fig:ar1-uniform}} and 
+\textcolor{red}{\Cref{fig:ar2-beta,fig:ar2-const,fig:ar2-const-sub,fig:ar2-uniform}}. In all examples each of the users demanded a flow rate of 
 $0.5$ while each server could supply a flow rate of $1$. 
 
-\begin{figure}[t!]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[t]{0.5\textwidth}
+    \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[width=\textwidth]{../Images/arbitrary-1-beta.pdf}
-        \caption{Flow rate divergence in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 10$.}
+        \caption{Flow rate in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 10$.}
         \label{fig:ar1-beta}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.5\textwidth}
+    \end{subfigure}\hspace{1.0cm}
+    \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[width=\textwidth]{../Images/arbitrary-1-constant.pdf}
-        \caption{Flow rate divergence in a $10\times 10$ grid with wires having constant bandwidths of $0.7$.}
+        \caption{Flow rate in a $10\times 10$ grid with wires having constant bandwidths of $0.7$.}
         \label{fig:ar1-const}
     \end{subfigure}
 \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-1-constant-sub.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having constant bandwidths of $0.3$.}
+        \label{fig:ar1-const-sub}
+    \end{subfigure}\hspace{1.0cm}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-1-uniform.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having bandwidths sampled from a uniform distribution between $0$ and $1$.}
+        \label{fig:ar1-uniform}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-2-beta.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 10$.}
+        \label{fig:ar2-beta}
+    \end{subfigure}\hspace{1.0cm}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-2-constant.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having constant bandwidths of $0.7$.}
+        \label{fig:ar2-const}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-2-constant-sub.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having constant bandwidths of $0.3$.}
+        \label{fig:ar2-const-sub}
+    \end{subfigure}\hspace{1.0cm}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../Images/arbitrary-2-uniform.pdf}
+        \caption{Flow rate in a $10\times 10$ grid with wires having bandwidths sampled from a uniform distribution between $0$ and $1$.}
+        \label{fig:ar2-uniform}
+    \end{subfigure}
+\end{figure}
+
 
 \section{Results}
 \subsection{Basic Configuration}
