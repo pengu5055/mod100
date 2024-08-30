@@ -46,7 +46,7 @@
 
 \vspace{5cm}
 \vspace{0.5cm}
-{\huge\textbf{Data Flow in a Randomized Computer Network}} \\
+{\huge\textbf{Distribution of Data Transmission in a Randomized Computer Network}} \\
 \vspace{0.5cm}
 {\large\textbf{Final Assignment for Model Analysis 1, 2023/24}}
 
@@ -120,7 +120,50 @@ The original text of the assignment reads as follows:
     ko je skupna hitrost prenosa največja. Ker gre za naključna omrežja, si oglej tudi statistično porazdelitev zanimivih količin.
 \end{quote}
 
+Translated to English this reads:
+\begin{quote}
+    \centering
+    \textbf{Distribution of Data Transmission in a Network:} Take a $N\times N$ square grid as the network model, where each edge has a random 
+    maximum connection speed between $0$ and $1$. The nodes on the top edge are internet clients, while the bottom edge are servers. 
+    In the internal nodes, Kirchhoff's first law holds. Using linear programming, determine the transmission speeds of the servers and clients 
+    when the total transmission speed is maximized. Since these are random networks, also examine the statistical distribution of 
+    interesting quantities.
+\end{quote}
+
 \section{Solution Overview}
+I took upon the task of simulating the flow of data in Python using \texttt{PuLP} as my choice of linear programming library among others 
+such as \texttt{numpy}, \texttt{scipy} and \texttt{matplotlib}. I'm aware that more complex network simulation packages exist for Python, 
+such as \texttt{networkx}, but I wanted to keep the simulation as simple as possible and home-brewed. To start I created the base classes,
+\texttt{User}, \texttt{Server} and \texttt{Wire} that represent the nodes of the network. Among other things each of these classes has a \texttt{bandwidth}
+attribute that specifies the maximum data throughput, processing rate and consumption rate, respectively. The other attributes 
+determine the position of the node in the grid, its ID etc. All these classes are slotted into a \texttt{Grid} class 
+that represents the network as a whole. The \texttt{Grid} class contains the necessary methods to setup the network, 
+solve the linear problem and extract or plot the results. \\
+
+I think it makes sense to go over the various constraints I've imposed on the network. The most challenging part of setting 
+the constraints was my want to use the absolute values of the flow rates in the linear equations. This becomes a problem 
+because the absolute value function is not linear and thus not directly compatible with linear programming. To get around 
+this I've used the following trick. I've introduced two new variables $\rho^+$ and $\rho^-$ that represent the positive and
+negative parts of the flow rates, respectively. Both of these quantities are non-negative and their sum is equal to the
+absolute value of the flow rate, such that $\rho = \rho^+ - \rho^-$. This way I can rewrite the absolute value of the flow rate
+as a linear combination of $\rho^+$ and $\rho^-$. \\ 
+
+The next step was to impose constraints for the flow rates through the 
+network. The flow rates are determined by the bandwidths of the wires, servers and users. Wires are allowed to transmit 
+data in both directions thus the absolute value of the flow rate cannot exceed two times the bandwidth of the wire. The sum 
+of the flow rates into a Wire node must be equal to the sum of the flow rates out of the Wire. Servers and Users are special 
+cases since they cause a divergence in what we could call the flow field, if we had a continuous field. The flow rate into a
+Server is strictly zero (thus $\rho^- = 0$). Likewise the flow rate out of a User is also strictly zero. The maximum flow
+rate into a User is determined by its bandwidth. The way I've set up the constraints is that the users demand the 
+maximum amount of data they can consume unconditionally while the servers are allowed to process data at
+a rate that is less than or equal to their bandwidth. \\
+
+The way the problem has been set up results in two sets of data for flow rates, one for the positive part and
+one for the negative part. The two are equal in magnitude but opposite in sign and we can consider the real 
+solution to be one or the other. The flow rate divergence is thus given by the sum of the two. The term flow rate 
+divergence is used here to describe data that is either consumed or produced by the network. The flow rate divergence
+must thus be zero at all nodes except for the Users and Servers. 
+
 \section{Results}
 \section{Conclusion and Comments}
 
