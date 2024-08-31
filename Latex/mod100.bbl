@@ -1,0 +1,19 @@
+\begin{thebibliography}{1}
+
+\bibitem{pulp}
+Iain Dunning and et~al.
+\newblock Pulp: A linear programming toolkit for python.
+\newblock {\em PuLP: A Linear Programming Toolkit for Python}, Sep 2011.
+
+\bibitem{astar}
+Peter~E. Hart, Nils~J. Nilsson, and Bertram Raphael.
+\newblock A formal basis for the heuristic determination of minimum cost paths.
+\newblock {\em IEEE Transactions on Systems Science and Cybernetics},
+  4(2):100--107, 1968.
+
+\bibitem{dijkstra}
+Donald~E. Knuth.
+\newblock A generalization of dijkstra's algorithm.
+\newblock {\em Information Processing Letters}, 6(1):1--5, 1977.
+
+\end{thebibliography}
