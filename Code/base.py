@@ -495,12 +495,13 @@ class AStar:
 
                 neighbor.parent = current_node
                 neighbor.g_cost = current_node.g_cost + 1  # Cost to Move to Neighbor
-                neighbor.h_cost = self.heuristic(neighbor, end_node)
+                neighbor.h_cost = 1/self.heuristic(neighbor, end_node)
                 neighbor.f_cost = neighbor.g_cost + neighbor.h_cost
 
                 # Check if this is a better path
                 if neighbor in self.open_set:
-                    if neighbor.g_cost > current_node.g_cost:
+                    # Inequality is flipped because small bandwidth is worse
+                    if neighbor.g_cost < current_node.g_cost:
                         continue
                     
                 self.open_set.append(neighbor)
@@ -533,9 +534,6 @@ class AStar:
         path = [end_node]
         current = end_node
 
-        print(current)
-        print(current.parent)
-
         while current.parent != start_node:
             path.append(current.parent)
             current = current.parent
@@ -554,4 +552,12 @@ class AStar:
         neighbor.f_cost = g_cost + h_cost
         neighbor.parent = current_node
         print(neighbor.parent)
+
+    def plot_path(self, start_node, end_node, ax):
+        path = self.search(start_node, end_node)
+        if path is not None:
+            x_cords = np.array([p.x for p in path]) + 0.5
+            y_cords = np.array([p.y for p in path]) + 0.5
+            ax.plot(x_cords, y_cords, color="red", linewidth=2, linestyle="--", zorder=15)
+        return path
         

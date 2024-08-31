@@ -26,7 +26,7 @@ grid.rerandomize(lambda: np.random.beta(10, 2))
 #     grid.add_user(user)
 server = Server(0, (0, 0), 1)
 grid.add_server(server)
-user = User(0, (size-1, size-1), 0.5)
+user = User(0, (5, 9), 0.5)
 grid.add_user(user)
 
 # Setup LP Problem
@@ -36,7 +36,7 @@ lp_problem = grid.lp_problem
 flow_results, flow_sum, flow_abs_sum = grid.solve_LP()
 
 
-fig, axs = plt.subplots(1, 1, figsize=(12, 6), layout="compressed")
+fig, axs = plt.subplots(1, 1, figsize=(8, 6), layout="compressed")
 ax = [axs]
 grid.plot_grid(ax[0])
 grid.plot_flow(fig, ax[0], flow_results)
@@ -45,12 +45,11 @@ grid.plot_flow_divergence(fig, ax[0])
 grid.plot_wire_bandwidths(fig, ax[0])
 
 astar = AStar(grid)
-path = astar.search(server, user)
-if path is not None:
-    ax[0].plot([p[0] for p in path], [p[1] for p in path], color="red", linewidth=2, linestyle="--", zorder=15)
+path = astar.plot_path(server, user, ax[0])
 ax[0].set_yticks(np.arange(0, size, 10))
 ax[0].set_xticks(np.arange(0, size, 10))
 ax[0].set_aspect('equal')
+ax[0].set_title("A* Pathfinding on $10\\times 10$ Grid\nwith Beta PDF Sampled Bandwidths")
 
-plt.savefig(f"./Images/astar-test.pdf", dpi=500)
+plt.savefig(f"./Images/astar-test-beta.pdf", dpi=500)
 plt.show()
