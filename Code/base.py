@@ -29,71 +29,76 @@ PLOT_FLOW_INDEX = {
     "W": (1, 0),
 }
 
+class Node:
+    def __init__(self, id, x, y, bandwidth):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.position = (x, y)
+        self.bandwidth = bandwidth
+        self.g_cost = bandwidth
+        self.h_cost = 0
+        self.f_cost = self.g_cost + self.h_cost
+        self.parent = None
+        self.flow = Flow(0, 0, 0, 0)
 
-class Server:
+
+class Server(Node):
     """
     Server class to represent a server in the system.
     """
     def __init__(self,
                  server_id,
                  server_position, 
-                 server_bandwidth_in,
-                 server_bandwidth_out,
+                 server_bandwidth,
                  ):
-        self.id = server_id
-        self.position = server_position
-        self.x = server_position[0]
-        self.y = server_position[1]
-        self.bandwidth_in = server_bandwidth_in
-        self.bandwidth_out = server_bandwidth_out
-        self.bandwidth = server_bandwidth_in
-        self.flow = Flow(0, 0, 0, 0)
+        super().__init__(server_id, server_position[0], 
+                         server_position[1], server_bandwidth)
 
     def __str__(self):
-        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
+        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __repr__(self):
-        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
+        return f"[Server: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __eq__(self, other):
-        return self.id == other.id and self.bandwidth_in == other.bandwidth_in and self.bandwidth_out == other.bandwidth_out
+        return self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
     
+    def __gt__(self, other):
+        return self.bandwidth > other.bandwidth
     
-class User:
+    
+class User(Node):
     """
     User class to represent a user in the system.
     """
     def __init__(self,
                  user_id,
                  user_position,
-                 user_bandwidth_in,
-                 user_bandwidth_out,
+                 user_bandwidth,
                  ):
-        self.id = user_id
-        self.position = user_position
-        self.x = user_position[0]
-        self.y = user_position[1]
-        self.bandwidth_in = user_bandwidth_in
-        self.bandwidth_out = user_bandwidth_out
-        self.bandwidth = user_bandwidth_in
-        self.flow = Flow(0, 0, 0, 0)
-
+        super.__init__(user_id, user_position[0],
+                        user_position[1], user_bandwidth)
+        
     def __str__(self):
-        return f"[User: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
+        return f"[User: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __repr__(self):
-        return f"[User: {self.id} // Bandwidth In: {self.bandwidth_in} // Bandwidth Out: {self.bandwidth_out}]"
+        return f"[User: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __eq__(self, other):
-        return self.id == other.id and self.bandwidth_in == other.bandwidth_in and self.bandwidth_out == other.bandwidth_out
+        return self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
     
-class Wire:
+    def __gt__(self, other):
+        return self.bandwidth > other.bandwidth
+    
+class Wire(Node):
     """
     Wire class to represent a wire in the system.
     """
@@ -102,12 +107,8 @@ class Wire:
                  wire_position,
                  wire_bandwidth,
                  ):
-        self.id = wire_id
-        self.x = wire_position[0]
-        self.y = wire_position[1]
-        self.position = wire_position
-        self.bandwidth = wire_bandwidth
-        self.flow = Flow(0, 0, 0, 0)
+        super().__init__(wire_id, wire_position[0],
+                         wire_position[1], wire_bandwidth)
 
     def __str__(self):
         return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
@@ -120,6 +121,9 @@ class Wire:
     
     def __ne__(self, other):
         return not self.__eq__(other)
+    
+    def __gt__(self, other):
+        return self.bandwidth > other.bandwidth
     
 
 class Flow:
@@ -140,7 +144,7 @@ class Flow:
     
     def __eq__(self, other):
         return self.N == other.N and self.E == other.E and self.S == other.S and self.W == other.W
-    
+        
     def __ne__(self, other):
         return not self.__eq__(other)
     
@@ -452,3 +456,85 @@ class Grid:
         cbar.set_label("Bandwidth")
         cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
         cbar.set_ticklabels(["0", "0.2", "0.4", "0.6", "0.8", "1"])
+
+
+class AStar:
+    def __init(self, grid):
+        self.grid = grid
+        self.indices = grid.get_indices()
+        self.size = grid.size
+        self.open_set = []
+        self.closed_set = []
+        
+    def search(self, start_node, end_node):
+        # This is an object array
+        self.open_set.append(start_node)
+
+        while self.open_set:
+            # Sort the Open Set to get Node with Lowest Cost First
+            self.open_set.sort()
+            current_node = self.open_set.pop(0)
+
+            # Add Current Node to Closed Set
+            self.closed_set.append(current_node)
+
+            if current_node == end_node:
+                # Have Reached the End Node
+                return self.reconstruct_path(current_node)
+            
+            # Get Neighbors
+            neighbors = self.grid.get_node_neighbors(current_node)
+            for neighbor in neighbors:
+                if neighbor in self.closed_set:
+                    continue
+
+                g_cost = current_node.g_cost + 1  # Cost to Move to Neighbor
+                h_cost = self.heuristic(neighbor, end_node)
+                f_cost = g_cost + h_cost
+
+                # Check if this is a better path
+                if neighbor in self.open_set:
+                    if neighbor.f_cost > f_cost:
+                        self.update_node(neighbor, g_cost, h_cost)
+                else:
+                    self.update_node(neighbor, g_cost, h_cost)
+
+        # No Path Found
+        return None
+
+    def get_node_neighbors(self, node):
+        dirs = FLOW_INDEX.values()
+        neighbors = []
+
+        for dir in dirs:
+            neighbor_pos = (node.x + dir[0], node.y + dir[1])
+
+            # Check if in grid
+            if neighbor_pos in self.indices:
+                # Check if traversable (so Wire class)
+                if isinstance(self.grid[neighbor_pos], Wire):
+                    neighbors.append(self.grid[neighbor_pos[0]][neighbor_pos[1]])
+
+        return neighbors
+    
+    def heuristic(self, node, end_node):
+        d = np.abs(node.x - end_node.x) + np.abs(node.y - end_node.y)
+        return d
+    
+    def reconstruct_path(self, start_node, goal_node):
+        path = [goal_node]
+        current = goal_node
+
+        while current.parent != start_node:
+            path.append(current.parent)
+            current = current.parent
+
+        # Reverse Path
+        return path[::-1]
+    
+    def update_node(self, node, current_node, g_cost, h_cost):
+        node.g_cost = g_cost
+        node.h_cost = h_cost
+        node.f_cost = g_cost + h_cost
+        node.parent = current_node
+        
