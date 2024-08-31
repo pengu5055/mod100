@@ -79,13 +79,13 @@ Ljubljana, August 2024 \\
 
 % Sections based on typical Model Analysis structure
 \section{Introduction}
-The scope of computer networks has been expanding rapidly in the past few decades. What once were simple 
+The scope of computer networks has been expanding rapidly in the past few decades. What were once simple 
 networks of interconnected computers have now evolved into complex systems that are used for a wide range of
 applications. It makes sense then for one to plan and analyze the flow of data in such networks to ensure that
 they are efficient and reliable and thus cheaper to maintain. \\
 
 As my final assignment for Model Analysis 1, I opted to simulate the flow of data in a randomized computer network. The network 
-consists of a $N\times N$ grid, where each unit of the grid can be a server, a user or a wire used to connect the two. Each of these 
+consists of a $N\times N$ grid, where each unit/node of the grid can be a server, a user or a wire used to connect the two. Each of these 
 units is connected to its four nearest neighbors and has a value associated with it that specifies it's bandwidth. For wires this is the 
 maximum data throughput, for servers it is the maximum data processing rate and for users it is the maximum data consumption rate. We'd like 
 to find the distribution of server-loads for a grid of wires with random bandwidths. It is possible to study many different types of 
@@ -97,8 +97,8 @@ known as linear programming and is a powerful tool for solving optimization prob
 use in the second task of this course \texttt{mod102} where we created a dietary plan from a set of given foods based on their costs 
 and nutritional values. For the sake of completeness it makes sense to quickly go over the basics of linear programming before we
 proceed with the simulation. Linear programming uses linear optimization to find the maximum or minimum of a linear function
-subject to a set of linear constraints. This function is known as the objective function and is quite analogous to the cost 
-function we've seen mentioned in the world of Machine Learning. The constraints are linear inequalities or equations that
+which is subject to a set of linear constraints. This function is known as the objective function and is quite analogous to the cost 
+function we've seen mentioned in the world of machine learning. The constraints are linear inequalities or equations that
 define the feasible region of the problem. Mathematically formulated we can consider a cost function $f(x)$ and a set of 
 constraints defined as:
 %
@@ -125,7 +125,6 @@ The original text of the assignment reads as follows:
     vozliščih velja 1. Kirchhoffov zakon. S pomočjo linearnega programiranja določi, kolikšne hitrosti prenosa imajo strežniki in odjemalci, 
     ko je skupna hitrost prenosa največja. Ker gre za naključna omrežja, si oglej tudi statistično porazdelitev zanimivih količin.
 \end{quote}
-
 Translated to English this reads:
 \begin{quote}
     \centering
@@ -159,7 +158,7 @@ network. The flow rates are determined by the bandwidths of the wires, servers a
 data in both directions thus the absolute value of the flow rate cannot exceed two times the bandwidth of the wire. The sum 
 of the flow rates into a Wire node must be equal to the sum of the flow rates out of the Wire. Servers and Users are special 
 cases since they cause a divergence in what we could call the flow field, if we had a continuous field. The flow rate into a
-Server is strictly zero (thus $\rho^- = 0$). Likewise the flow rate out of a User is also strictly zero. The maximum flow
+Server is strictly zero (thus $\rho^- = 0$). Likewise the flow rate out of a User is also strictly zero (thus $\rho^+ = 0$). The maximum flow
 rate into a User is determined by its bandwidth. The way I've set up the constraints is that the users demand the 
 maximum amount of data they can consume unconditionally while the servers are allowed to process data at
 a rate that is less than or equal to their bandwidth. \\
@@ -171,8 +170,8 @@ The objective function is thus a linear combination of the flow rates and server
 
 The way the problem has been set up results in two sets of data for flow rates, one for the positive part and
 one for the negative part. The two are equal in magnitude but opposite in sign and we can consider the real 
-solution to be one or the other. The flow rate divergence is thus given by the sum of the two. The term flow rate 
-divergence is used here to describe data that is either consumed or produced by the network. The flow rate divergence
+solution to be one or the other. The flow divergence is thus given by the sum of the two. The term flow 
+divergence is used here to describe data that is either consumed or produced by the network. The flow divergence
 must thus be zero at all nodes except for the Users and Servers. \\
 
 To stick with the purpose of having a home-brewed simulation I also drew some icons for the Users and Servers in a pixel 
@@ -248,11 +247,11 @@ I will not claim that it was effortless to set up properly. \\
 
 
 \section{Results}
-First I ran the simulation for a $30\times 30$ grid with wires having bandwidths between $0$ and $1$. It is important to note 
+Let's have a look at the results. It is important to note 
 that the bandwidths were not sampled uniformly but rather from a beta distribution. The beta distribution is a 
 continuous probability distribution that is defined on the interval $[0, 1]$. It is a good choice for this problem
 since we can easily skew the distribution towards the lower or higher bandwidths. Having a uniform distribution yielded 
-grids that were infeasible to solve. The \textcolor{red}{\Cref{fig:beta_dist}} shows the probability density function
+grids that were infeasible to solve, especially at larger sizes. The \textcolor{red}{\Cref{fig:beta_dist}} shows the probability density function
 of the beta distribution for different values of the shape parameters $\alpha$ and $\beta$. The shape parameters determine
 the skewness of the distribution. 
 
@@ -265,7 +264,7 @@ the skewness of the distribution.
 
 We can see the results of a basic simulation for a $10\times 10$ grid in \textcolor{red}{\Cref{fig:basic_grid}}. The wires 
 in this grid have bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$. For illustrative purposes
-I've colored the nodes based on their flow rate divergence and plotted both the positive and negative parts of the 
+I've colored the nodes based on their flow divergence and plotted both the positive and negative parts of the 
 flow rates.
 
 \begin{figure}[H]
@@ -275,7 +274,7 @@ flow rates.
     \label{fig:basic_grid}
 \end{figure}
 
-We can see that the flow rate divergence is zero at all nodes except for the Users and Servers. The flow of data goes almost 
+We can see that the flow divergence is zero at all nodes except for the Users and Servers. The flow of data goes almost 
 as linearly as possible from the Users to the Servers, however due to the objective functions demand to minimize server loads 
 the flow rates are not uniform. We can see on the left-hand side of the grid that the flow is higher for the second server and lower 
 for the first. The first user receives data from both these servers as a portion of the data is carried over from the second 
@@ -309,10 +308,10 @@ sampled from the beta distribution for different shape parameters. I've also add
     \label{fig:server-load}
 \end{figure}
 
-Findings from this plot can be somewhat inconclusive however as there is really not much of a trend to compare. In addition, sampling from a less skewed distribution
+Findings from this plot can be somewhat inconclusive as there is really not much of a trend to compare. In addition, sampling from a distribution that is less skewed towards $1$
 has a large impact on the feasibility of the grid. This infeasibility only grows with the size of the grid. I've tried to do some rudimentary correction to the histograms 
 by rescaling them to the proper number of samples however this can definitely lead to false results especially in the case of the lower rightmost plot. The shape of the 
-histogram is only for those configurations that were feasible. There's no telling how the shape could change were the other configurations also feasible. I wonder if I have perhaps 
+histogram shown is only for those configurations that were feasible. There's no telling how the shape could change were the other configurations also properly solved. I wonder if I have perhaps 
 misunderstood the instructions since the majority of large grids are infeasible to solve with random bandwidth sampling for the wires.
 What we can see is that the more skewed the distribution of bandwidths is to $1$ the more we see a \textit{delta} function like distribution
 of server-loads centered around the bandwidth the users demand. More uniform wire bandwidth distributions lead to a more uniformly distributed 
@@ -326,7 +325,7 @@ as I feel that I could have done more with the model and everything seems somewh
 quantities such as the \textit{ping} time between the Users and Servers and \textit{jitter}, which is the variation in the ping time but 
 I had big problems with implementing proper pathfinding based on the results of the LP problem. Looking back I think it could have been easier to 
 just calculate some of these quantities directly by hand. \textcolor{red}{\Cref{fig:astar,fig:dijsktra}} show the results of the pathfinding
-algorithms \textit{A*} \cite{astar} and \textit{Dijkstra's} Algorithm \cite{dijkstra} for the $10\times 10$ grid again with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$
+algorithms \texttt{A*} \cite{astar} and \texttt{Dijkstra's Algorithm} \cite{dijkstra} for the $10\times 10$ grid again with wires having bandwidths sampled from a beta distribution with $\alpha = 10$ and $\beta = 2$
 or set to a constant value of $0.7$. 
 
 \begin{figure}[H]
@@ -366,7 +365,7 @@ The \texttt{A*} algorithm used the wire bandwidth as the path cost function and 
 these pathfinding algorithms but I hardly see any point in doing so as I've not been able to use them for any useful results. The paths 
 they find are not the same as the ones the LP problem finds and I'm not sure how to reconcile the two. \\
 
-As a sort of consolation prize I've calculated the LP problem total and solve time for different grid sizes. Each grid was attempted to be 
+As a sort of consolation prize I've calculated the LP problem total and solve times for different grid sizes. Each grid was attempted to be 
 solved $10$ times. The total time is the time needed to solve the full problem including it's setup while the solve time is only the time needed to 
 run the LP problem solver once the problem has been setup. The results can be seen in \textcolor{red}{\Cref{fig:time}}.
 
@@ -400,13 +399,14 @@ did not have as many feasible solutions. \\
 
 \section{Conclusion and Comments}
 As mentioned towards the end of the report I'm not entirely happy with the results and I think this whole project 
-was rather uninspired. I had bigger plans for the model but I was not able to implement them in time, which is entirely 
-my fault, to be clear. I think the results I have presented are at least moderately interesting. I hope I correctly 
+was rather uninspired. I had bigger plans for the model but I was not able to implement them in time, which to be clear is entirely 
+my fault. I think the results I have presented are at least moderately interesting. I hope I correctly 
 understood the task and that the results I've presented are at least somewhat relevant. I started to have doubts when trying 
-to solve for the larger grids and I'm not sure if I've done something wrong. \\
+to solve for the larger grids and I'm not sure if I've done something wrong. However it was already to late to make 
+major changes to the model. I find the results interesting. At least the patterns that the model are fun to look at.\\ 
 
 Thanks to the professor and the teaching assistant for the course. I've learned a lot and I'm looking forward to the continuation 
-of the course. I hope to do better in the future.
+of the course in part two. I hope to do better in the future.
 
 % Add references
 \newpage

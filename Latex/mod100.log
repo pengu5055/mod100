@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  31 AUG 2024 19:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.16)  31 AUG 2024 19:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -442,27 +442,27 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has b
                    \relax 
 l.121 \begin{quote}
                     [1]
-Underfull \hbox (badness 10000) in paragraph at lines 140--148
+Underfull \hbox (badness 10000) in paragraph at lines 139--147
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 149--156
+Underfull \hbox (badness 10000) in paragraph at lines 148--155
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 157--166
+Underfull \hbox (badness 10000) in paragraph at lines 156--165
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 167--171
+Underfull \hbox (badness 10000) in paragraph at lines 166--170
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 172--177
+Underfull \hbox (badness 10000) in paragraph at lines 171--176
 
  []
 
@@ -470,125 +470,125 @@ Underfull \hbox (badness 10000) in paragraph at lines 172--177
 <../Images/arbitrary-1-beta.pdf, id=80, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-beta.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-beta.pdf>
-Package pdftex.def Info: ../Images/arbitrary-1-beta.pdf  used on input line 188.
+Package pdftex.def Info: ../Images/arbitrary-1-beta.pdf  used on input line 187.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-1-constant.pdf, id=81, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-constant.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-constant.pdf>
-Package pdftex.def Info: ../Images/arbitrary-1-constant.pdf  used on input line 193.
+Package pdftex.def Info: ../Images/arbitrary-1-constant.pdf  used on input line 192.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-1-constant-sub.pdf, id=82, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-constant-sub.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-constant-sub.pdf>
-Package pdftex.def Info: ../Images/arbitrary-1-constant-sub.pdf  used on input line 202.
+Package pdftex.def Info: ../Images/arbitrary-1-constant-sub.pdf  used on input line 201.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-1-uniform.pdf, id=83, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-1-uniform.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-1-uniform.pdf>
-Package pdftex.def Info: ../Images/arbitrary-1-uniform.pdf  used on input line 207.
+Package pdftex.def Info: ../Images/arbitrary-1-uniform.pdf  used on input line 206.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-2-beta.pdf, id=84, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-beta.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-beta.pdf>
-Package pdftex.def Info: ../Images/arbitrary-2-beta.pdf  used on input line 216.
+Package pdftex.def Info: ../Images/arbitrary-2-beta.pdf  used on input line 215.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-2-constant.pdf, id=85, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-constant.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-constant.pdf>
-Package pdftex.def Info: ../Images/arbitrary-2-constant.pdf  used on input line 221.
+Package pdftex.def Info: ../Images/arbitrary-2-constant.pdf  used on input line 220.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
  [3 <../Images/arbitrary-1-beta.pdf> <../Images/arbitrary-1-constant.pdf> <../Images/arbitrary-1-constant-sub.pdf> <../Images/arbitrary-1-uniform.pdf>]
 <../Images/arbitrary-2-constant-sub.pdf, id=312, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-constant-sub.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-constant-sub.pdf>
-Package pdftex.def Info: ../Images/arbitrary-2-constant-sub.pdf  used on input line 230.
+Package pdftex.def Info: ../Images/arbitrary-2-constant-sub.pdf  used on input line 229.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/arbitrary-2-uniform.pdf, id=313, 578.16pt x 433.62pt>
 File: ../Images/arbitrary-2-uniform.pdf Graphic file (type pdf)
 <use ../Images/arbitrary-2-uniform.pdf>
-Package pdftex.def Info: ../Images/arbitrary-2-uniform.pdf  used on input line 235.
+Package pdftex.def Info: ../Images/arbitrary-2-uniform.pdf  used on input line 234.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 241--248
+Underfull \hbox (badness 10000) in paragraph at lines 240--247
 
  []
 
 <../Images/beta_dist.pdf, id=315, 578.16pt x 433.62pt>
 File: ../Images/beta_dist.pdf Graphic file (type pdf)
 <use ../Images/beta_dist.pdf>
-Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 261.
+Package pdftex.def Info: ../Images/beta_dist.pdf  used on input line 260.
 (pdftex.def)             Requested size: 318.66948pt x 239.0012pt.
 [4 <../Images/arbitrary-2-beta.pdf> <../Images/arbitrary-2-constant.pdf> <../Images/arbitrary-2-constant-sub.pdf> <../Images/arbitrary-2-uniform.pdf>]
 <../Images/optimize-case-10.pdf, id=537, 578.16pt x 433.62pt>
 File: ../Images/optimize-case-10.pdf Graphic file (type pdf)
 <use ../Images/optimize-case-10.pdf>
-Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 273.
+Package pdftex.def Info: ../Images/optimize-case-10.pdf  used on input line 272.
 (pdftex.def)             Requested size: 364.19667pt x 273.14235pt.
  [5 <../Images/beta_dist.pdf> <../Images/optimize-case-10.pdf>]
 <../Images/optimize-30-100.pdf, id=644, 867.24pt x 433.62pt>
 File: ../Images/optimize-30-100.pdf Graphic file (type pdf)
 <use ../Images/optimize-30-100.pdf>
-Package pdftex.def Info: ../Images/optimize-30-100.pdf  used on input line 290.
+Package pdftex.def Info: ../Images/optimize-30-100.pdf  used on input line 289.
 (pdftex.def)             Requested size: 446.13727pt x 223.06868pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--300
+Underfull \hbox (badness 10000) in paragraph at lines 294--299
 
  []
 
 <../Images/bandwidth-dist.pdf, id=646, 867.24pt x 578.16pt>
 File: ../Images/bandwidth-dist.pdf Graphic file (type pdf)
 <use ../Images/bandwidth-dist.pdf>
-Package pdftex.def Info: ../Images/bandwidth-dist.pdf  used on input line 307.
+Package pdftex.def Info: ../Images/bandwidth-dist.pdf  used on input line 306.
 (pdftex.def)             Requested size: 446.13727pt x 297.4249pt.
 [6 <../Images/optimize-30-100.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 312--323
+Underfull \hbox (badness 10000) in paragraph at lines 311--322
 
  []
 
 <../Images/astar-test-beta.pdf, id=732, 578.16pt x 433.62pt>
 File: ../Images/astar-test-beta.pdf Graphic file (type pdf)
 <use ../Images/astar-test-beta.pdf>
-Package pdftex.def Info: ../Images/astar-test-beta.pdf  used on input line 335.
+Package pdftex.def Info: ../Images/astar-test-beta.pdf  used on input line 334.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/astar-test-const.pdf, id=733, 578.16pt x 433.62pt>
 File: ../Images/astar-test-const.pdf Graphic file (type pdf)
 <use ../Images/astar-test-const.pdf>
-Package pdftex.def Info: ../Images/astar-test-const.pdf  used on input line 340.
+Package pdftex.def Info: ../Images/astar-test-const.pdf  used on input line 339.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 [7 <../Images/bandwidth-dist.pdf>]
 <../Images/dijkstra-test-beta.pdf, id=848, 578.16pt x 433.62pt>
 File: ../Images/dijkstra-test-beta.pdf Graphic file (type pdf)
 <use ../Images/dijkstra-test-beta.pdf>
-Package pdftex.def Info: ../Images/dijkstra-test-beta.pdf  used on input line 351.
+Package pdftex.def Info: ../Images/dijkstra-test-beta.pdf  used on input line 350.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 <../Images/dijkstra-test-const.pdf, id=849, 578.16pt x 433.62pt>
 File: ../Images/dijkstra-test-const.pdf Graphic file (type pdf)
 <use ../Images/dijkstra-test-const.pdf>
-Package pdftex.def Info: ../Images/dijkstra-test-const.pdf  used on input line 356.
+Package pdftex.def Info: ../Images/dijkstra-test-const.pdf  used on input line 355.
 (pdftex.def)             Requested size: 204.85846pt x 153.64174pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 364--368
+Underfull \hbox (badness 10000) in paragraph at lines 363--367
 
  []
 
 <../Images/time-complexity.pdf, id=851, 867.24pt x 433.62pt>
 File: ../Images/time-complexity.pdf Graphic file (type pdf)
 <use ../Images/time-complexity.pdf>
-Package pdftex.def Info: ../Images/time-complexity.pdf  used on input line 375.
+Package pdftex.def Info: ../Images/time-complexity.pdf  used on input line 374.
 (pdftex.def)             Requested size: 446.13727pt x 223.06868pt.
 [8 <../Images/astar-test-beta.pdf> <../Images/astar-test-const.pdf> <../Images/dijkstra-test-beta.pdf> <../Images/dijkstra-test-const.pdf>]
 <../Images/flow-sum.pdf, id=1110, 578.16pt x 433.62pt>
 File: ../Images/flow-sum.pdf Graphic file (type pdf)
 <use ../Images/flow-sum.pdf>
-Package pdftex.def Info: ../Images/flow-sum.pdf  used on input line 388.
+Package pdftex.def Info: ../Images/flow-sum.pdf  used on input line 387.
 (pdftex.def)             Requested size: 318.66948pt x 239.0012pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 393--400
+Underfull \hbox (badness 10000) in paragraph at lines 392--399
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--407
+Underfull \hbox (badness 10000) in paragraph at lines 401--407
 
  []
 
@@ -605,7 +605,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  67i,9n,77p,358b,547s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on mod100.pdf (12 pages, 1838694 bytes).
+Output written on mod100.pdf (12 pages, 1838284 bytes).
 PDF statistics:
  1356 PDF objects out of 1440 (max. 8388607)
  450 compressed objects within 5 object streams
