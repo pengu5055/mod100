@@ -52,8 +52,7 @@ class Server(Node):
                  server_position, 
                  server_bandwidth,
                  ):
-        super().__init__(server_id, server_position[0], 
-                         server_position[1], server_bandwidth)
+        super(Server, self).__init__(server_id, server_position[0], server_position[1], server_bandwidth)
 
     def __str__(self):
         return f"[Server: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
@@ -62,7 +61,9 @@ class Server(Node):
         return f"[Server: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __eq__(self, other):
-        return self.bandwidth == other.bandwidth
+        if other is None:
+            return False
+        return self.position == other.position and self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -80,9 +81,8 @@ class User(Node):
                  user_position,
                  user_bandwidth,
                  ):
-        super.__init__(user_id, user_position[0],
-                        user_position[1], user_bandwidth)
-        
+        super(User, self).__init__(user_id, user_position[0], user_position[1], user_bandwidth)
+
     def __str__(self):
         return f"[User: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
@@ -90,7 +90,9 @@ class User(Node):
         return f"[User: {self.id} // Bandwidth In: {self.bandwidth} // Position: {self.position}]"
     
     def __eq__(self, other):
-        return self.bandwidth == other.bandwidth
+        if other is None:
+            return False
+        return self.position == other.position and self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -107,8 +109,8 @@ class Wire(Node):
                  wire_position,
                  wire_bandwidth,
                  ):
-        super().__init__(wire_id, wire_position[0],
-                         wire_position[1], wire_bandwidth)
+        super(Wire, self).__init__(wire_id, wire_position[0], wire_position[1], wire_bandwidth)
+
 
     def __str__(self):
         return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
@@ -117,7 +119,9 @@ class Wire(Node):
         return f"[Wire: {self.id} // Bandwidth: {self.bandwidth}]"
     
     def __eq__(self, other):
-        return self.id == other.id and self.bandwidth == other.bandwidth
+        if other is None:
+            return False
+        return self.position == other.position and self.bandwidth == other.bandwidth
     
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -210,13 +214,13 @@ class Grid:
     
     def get_servers(self):
         list_servers = [x for x in self.grid.flatten() if isinstance(x, Server)]
-        output = [[s.id, s.x, s.y, s.bandwidth_in, s.bandwidth_out] for s in list_servers]
+        output = [[s.id, s.x, s.y, s.bandwidth] for s in list_servers]
 
         return np.array(output)
     
     def get_users(self):
         list_users = [x for x in self.grid.flatten() if isinstance(x, User)]
-        output = [[u.id, u.x, u.y, u.bandwidth_in, u.bandwidth_out] for u in list_users]
+        output = [[u.id, u.x, u.y, u.bandwidth] for u in list_users]
 
         return np.array(output)
     
@@ -459,7 +463,7 @@ class Grid:
 
 
 class AStar:
-    def __init(self, grid):
+    def __init__(self, grid):
         self.grid = grid
         self.indices = grid.get_indices()
         self.size = grid.size
@@ -480,26 +484,29 @@ class AStar:
 
             if current_node == end_node:
                 # Have Reached the End Node
-                return self.reconstruct_path(current_node)
+                print("Path Found")
+                return self.reconstruct_path(start_node, current_node)
             
             # Get Neighbors
-            neighbors = self.grid.get_node_neighbors(current_node)
+            neighbors = self.get_node_neighbors(current_node)
             for neighbor in neighbors:
                 if neighbor in self.closed_set:
                     continue
 
-                g_cost = current_node.g_cost + 1  # Cost to Move to Neighbor
-                h_cost = self.heuristic(neighbor, end_node)
-                f_cost = g_cost + h_cost
+                neighbor.parent = current_node
+                neighbor.g_cost = current_node.g_cost + 1  # Cost to Move to Neighbor
+                neighbor.h_cost = self.heuristic(neighbor, end_node)
+                neighbor.f_cost = neighbor.g_cost + neighbor.h_cost
 
                 # Check if this is a better path
                 if neighbor in self.open_set:
-                    if neighbor.f_cost > f_cost:
-                        self.update_node(neighbor, g_cost, h_cost)
-                else:
-                    self.update_node(neighbor, g_cost, h_cost)
+                    if neighbor.g_cost > current_node.g_cost:
+                        continue
+                    
+                self.open_set.append(neighbor)
 
         # No Path Found
+        print("No Path Found")
         return None
 
     def get_node_neighbors(self, node):
@@ -512,29 +519,39 @@ class AStar:
             # Check if in grid
             if neighbor_pos in self.indices:
                 # Check if traversable (so Wire class)
-                if isinstance(self.grid[neighbor_pos], Wire):
-                    neighbors.append(self.grid[neighbor_pos[0]][neighbor_pos[1]])
+                # if isinstance(self.grid[neighbor_pos], Wire):
+                neighbors.append(self.grid[neighbor_pos[0]][neighbor_pos[1]])
 
         return neighbors
     
     def heuristic(self, node, end_node):
+        # Use Manhattan Distance
         d = np.abs(node.x - end_node.x) + np.abs(node.y - end_node.y)
         return d
     
-    def reconstruct_path(self, start_node, goal_node):
-        path = [goal_node]
-        current = goal_node
+    def reconstruct_path(self, start_node, end_node):
+        path = [end_node]
+        current = end_node
+
+        print(current)
+        print(current.parent)
 
         while current.parent != start_node:
             path.append(current.parent)
             current = current.parent
 
+        # Add Start Node
+        path.append(start_node)
+
         # Reverse Path
         return path[::-1]
     
-    def update_node(self, node, current_node, g_cost, h_cost):
-        node.g_cost = g_cost
-        node.h_cost = h_cost
-        node.f_cost = g_cost + h_cost
-        node.parent = current_node
+    def update_node(self, neighbor, current_node, g_cost, h_cost):
+        print(neighbor)
+        print(neighbor.parent)
+        neighbor.g_cost = g_cost
+        neighbor.h_cost = h_cost
+        neighbor.f_cost = g_cost + h_cost
+        neighbor.parent = current_node
+        print(neighbor.parent)
         

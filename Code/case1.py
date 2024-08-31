@@ -15,28 +15,28 @@ colors = cmr.take_cmap_colors("cmr.tropical", 8, cmap_range=(0, 0.85))
 cm = custom_cmap
 
 # Initiate Grid
-size = 30
+size = 10
 grid = Grid(size)
 indices = [(i, j) for i in range(grid.size) for j in range(grid.size)]
 
 # grid.derandomize(0.7)
 grid.rerandomize(lambda: np.random.beta(10, 2)) 
 for i in range(int(0.1*size), int(0.9*size)):
-    server = Server(i, (i, 0), 1, 1)
+    server = Server(i, (i, 0), 1)
     grid.add_server(server)
-    user = User(i, (i, size-1), 0.5, 0.5)
+    user = User(i, (i, size-1), 0.5)
     grid.add_user(user)
 
-size2 = 100
+size2 = 30
 grid2 = Grid(size2)
 indices = [(i, j) for i in range(grid2.size) for j in range(grid2.size)]
 
 # grid.derandomize(0.7)
 grid2.rerandomize(lambda: np.random.beta(10, 2))
 for i in range(int(0.1*size2), int(0.9*size2)):
-    server = Server(i, (i, 0), 1, 1)
+    server = Server(i, (i, 0), 1)
     grid2.add_server(server)
-    user = User(i, (i, size2-1), 0.5, 0.5)
+    user = User(i, (i, size2-1), 0.5)
     grid2.add_user(user)
 
 # Setup LP Problem
@@ -74,5 +74,5 @@ ax[0].set_title("Beta PDF Sampled $100\\times 100$ Grid")
 ax[0].set_aspect('equal')
 
 
-plt.savefig(f"./Images/optimize-30-100.pdf", dpi=500)
+# plt.savefig(f"./Images/optimize-30-100.pdf", dpi=500)
 plt.show()
